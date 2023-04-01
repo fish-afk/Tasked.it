@@ -1,8 +1,14 @@
 import React from 'react'
-import Navbar from '../../Components/Navbar'
 
-export default function AdminHome() {
-    return (
-      <Navbar priv='Admins'/>
-  )
+
+type proptypes = {
+  username: string
+}
+
+export default function AdminHome({username}: proptypes) {
+  return (
+		<React.Fragment>
+			Welcome {username}.
+		</React.Fragment>
+	);
 }

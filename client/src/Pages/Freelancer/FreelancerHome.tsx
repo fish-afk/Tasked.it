@@ -1,7 +1,13 @@
 import React from 'react'
 
-export default function FreelancerHome() {
+type proptypes = {
+	username: string;
+};
+
+export default function FreelancerHome({username} : proptypes) {
   return (
-    <div>FreelancerHome</div>
+    <React.Fragment>
+      Welcome {username}.
+    </React.Fragment>
   )
 }
