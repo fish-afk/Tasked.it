@@ -16,7 +16,7 @@ function App() {
 		)
 	) : (
 		<div className="container my-5">
-			<h1 className="text-center mb-4">Welcome to VTE projectify.</h1>
+			<h1 className="text-center mb-4">Welcome to VTE Tasked.it</h1>
 			<h3 className="text-center mb-4 mt-5">Login as :</h3>
 			<div className="d-flex justify-content-center">
 				<div className="btn-group" role="group">

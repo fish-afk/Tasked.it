@@ -1,7 +1,6 @@
-import express from 'express';
+const express = require('express');
 
 const app = express();
-
 
 app.get('/test', (req, res) => {
     return res.send("ok");
