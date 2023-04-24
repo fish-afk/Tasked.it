@@ -1,10 +1,15 @@
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 type NavProps = {
-    priv: string
-}
+	priv: string;
+};
 
-const Navbar = ({priv}: NavProps) => {
-	return (
+const Navbar = ({ priv }: NavProps) => {
+	const Navigate = useNavigate();
+
+
+	return priv == "admin" ? (
 		<div
 			className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark"
 			style={{ width: "280px", height: "100vh" }}
@@ -34,7 +39,15 @@ const Navbar = ({priv}: NavProps) => {
 						<svg className="bi me-2" width="16" height="16">
 							<use xlinkHref="#speedometer2"></use>
 						</svg>
-						Dashboard
+						Freelancers
+					</a>
+				</li>
+				<li>
+					<a href="#" className="nav-link text-white">
+						<svg className="bi me-2" width="16" height="16">
+							<use xlinkHref="#speedometer2"></use>
+						</svg>
+						Admins
 					</a>
 				</li>
 				<li>
@@ -42,7 +55,7 @@ const Navbar = ({priv}: NavProps) => {
 						<svg className="bi me-2" width="16" height="16">
 							<use xlinkHref="#table"></use>
 						</svg>
-						Orders
+						Projects
 					</a>
 				</li>
 				<li>
@@ -50,7 +63,7 @@ const Navbar = ({priv}: NavProps) => {
 						<svg className="bi me-2" width="16" height="16">
 							<use xlinkHref="#grid"></use>
 						</svg>
-						Products
+						Roles
 					</a>
 				</li>
 				<li>
@@ -58,19 +71,40 @@ const Navbar = ({priv}: NavProps) => {
 						<svg className="bi me-2" width="16" height="16">
 							<use xlinkHref="#people-circle"></use>
 						</svg>
-						Customers
+						Messages
 					</a>
 				</li>
 			</ul>
 			<hr />
-			<div className="container text-white btn btn-danger">
-				<h3>
-					Logout
-				</h3>
+			<div
+				className="container text-white btn btn-primary mb-3"
+				onClick={() => {
+					
+				}}
+			>
+				<h3>Edit Profile</h3>
 			</div>
-				
+			<div
+				className="container text-white btn btn-danger"
+				onClick={() => {
+					Swal.fire({
+						title: "Are you sure you want to logout?",
+						icon: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#3085d6",
+						cancelButtonColor: "#d33",
+						confirmButtonText: "Yes",
+					}).then((result) => {
+						if (result.isConfirmed) {
+							Navigate(`/${priv}/logout`);
+						}
+					});
+				}}
+			>
+				<h3>Logout</h3>
+			</div>
 		</div>
-	);
+	) : <></>;
 };
 
 export default Navbar;

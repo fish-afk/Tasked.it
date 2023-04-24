@@ -23,7 +23,7 @@ export default function AdminLogin({setusername} : any) {
 				localStorage.setItem("taskedit-accesstoken", data.accessToken);
 				localStorage.setItem("taskedit-refreshtoken", data.refreshToken);
 				localStorage.setItem("username", username);
-				setusername(username)
+
 				Navigate('/admin/home')
 
 			} else {

@@ -22,7 +22,7 @@ export default function FreelancerLogin({setusername}: any) {
 				localStorage.setItem("taskedit-accesstoken", data.accessToken);
 				localStorage.setItem("taskedit-refreshtoken", data.refreshToken);
 				localStorage.setItem("username", username);
-				setusername(username)
+
 				Navigate('/freelancer/home')
 			} else {
 				alert('wrong creds')
