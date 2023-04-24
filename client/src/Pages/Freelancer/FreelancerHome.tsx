@@ -1,13 +1,16 @@
 import React from 'react'
+import Navbar from '../../Components/Navbar';
 
-type proptypes = {
-	username: string;
-};
-
-export default function FreelancerHome({username} : proptypes) {
+export default function FreelancerHome() {
+  const username = JSON.stringify(localStorage.getItem("username")).replaceAll('"', '');
   return (
-    <React.Fragment>
-      Welcome {username}.
-    </React.Fragment>
-  )
+	  <div className='d-flex'>
+		  <Navbar  priv='freelancer'/>
+		  <div className="text-center container">
+			  <h1>
+				  Welcome {username}.
+			  </h1>
+			</div>
+		</div>
+	);
 }

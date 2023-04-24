@@ -1,13 +1,18 @@
 import React from 'react'
+import Navbar from '../../Components/Navbar';
 
-type proptypes = {
-  username: string
-}
 
-export default function AdminHome({username}: proptypes) {
+export default function AdminHome() {
+	
+	const username = JSON.stringify(localStorage.getItem("username")).replaceAll('"', '');
   return (
-		<React.Fragment>
-			Welcome {username}.
-		</React.Fragment>
+	  <div className='d-flex'>
+		  <Navbar  priv='admin'/>
+		  <div className="text-center container">
+			  <h1>
+				  Welcome {username}.
+			  </h1>
+			</div>
+		</div>
 	);
 }

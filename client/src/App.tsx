@@ -21,14 +21,14 @@ function App() {
 				<Route path="/admin">
 					<Route element={<AdminRedirect />} index />
 					<Route path="/admin/login" element={<AdminLogin />} />
-					<Route path="/admin/home" element={<AdminHome username="" />} />
+					<Route path="/admin/home" element={<AdminHome />} />
 					<Route path="/admin/logout" element={<Logout accountype="admin" />} />
 				</Route>
 
 				<Route path="/freelancer">
 					<Route element={<FreelancerRedirect />} index />
 					<Route path="/freelancer/login" element={<FreelancerLogin />} />
-					<Route path="/freelancer/home" element={<FreelancerHome username="" />} />
+					<Route path="/freelancer/home" element={<FreelancerHome />} />
 					<Route path="/freelancer/logout" element={<Logout accountype="freelancer" />} />
 				</Route>
 			</Routes>

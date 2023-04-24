@@ -215,3 +215,15 @@ module.exports = {
 	generateRefreshToken,
 	confirmJWT,
 };
+
+/**
+ * This is a module that contains functions for creating, verifying, and refreshing JSON Web Tokens
+ * (JWTs) for both freelancers and admins.
+ * @param username - The username of the user for whom the JWT token is being created or verified.
+ * @param [privs=Freelancer] - privs is short for "privileges" and refers to the level of access or
+ * permissions that a user has within the system. In this code, it is used to determine whether the
+ * user is an Admin or a Freelancer, and to set the expiration time for the JWT accordingly.
+ * @returns An object containing several functions related to JWT authentication and refresh tokens.
+ * These functions include creating a JWT token, generating a refresh token, verifying a refresh token,
+ * verifying a JWT token, and confirming the validity of a JWT token.
+ */

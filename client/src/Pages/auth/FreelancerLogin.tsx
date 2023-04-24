@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const SERVER_URL = "http://localhost:4455"
 
-export default function FreelancerLogin() {
+export default function FreelancerLogin({setusername}: any) {
 
 	const Navigate = useNavigate()
     const login = async (username: string, password: string) => {
@@ -22,6 +22,7 @@ export default function FreelancerLogin() {
 				localStorage.setItem("taskedit-accesstoken", data.accessToken);
 				localStorage.setItem("taskedit-refreshtoken", data.refreshToken);
 				localStorage.setItem("username", username);
+				setusername(username)
 				Navigate('/freelancer/home')
 			} else {
 				alert('wrong creds')
@@ -51,12 +52,12 @@ export default function FreelancerLogin() {
 
                                     <form onSubmit={handleLogin}>
                                         <div className="form-outline form-white mb-4">
-                                            <input type="text" id="username" className="form-control form-control-lg" />
+                                            <input required type="text" id="username" className="form-control form-control-lg" />
                                             <label className="form-label" htmlFor="typeEmailX">Username</label>
                                         </div>
 
                                         <div className="form-outline form-white mb-4">
-                                            <input type="password" id="password" className="form-control form-control-lg" />
+                                            <input required type="password" id="password" className="form-control form-control-lg" />
                                             <label className="form-label" htmlFor="typePasswordX">Password</label>
                                         </div>
 
