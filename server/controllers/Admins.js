@@ -58,7 +58,7 @@ const refresh = async (req, res) => {
 
 async function registerAdmin(req, res) {
 
-    const { username, password, email, fullname, admin_key } = req.body;
+    const { username, password, email, fullname, employee_title = "staff", admin_key } = req.body;
     
     if (admin_key !== process.env.ADMIN_KEY) {
         return res.send({status: 'FAILURE', message: 'Not authorised'})
@@ -68,7 +68,7 @@ async function registerAdmin(req, res) {
 	bcrypt.hash(password, SALT_ROUNDS, (err, hashedPassword) => {
 		if (err) throw err;
 
-		const admin = { username, password: hashedPassword, email, fullname };
+		const admin = { username, password: hashedPassword, email, fullname, employee_title };
 
 		// check if username exists
 		Model.connection.query(
@@ -88,15 +88,19 @@ async function registerAdmin(req, res) {
 						"INSERT INTO Admins SET ?",
 						admin,
 						(err, result) => {
-							if (err)
-								res.status(500).send({
+							if (err) {
+								console.log(err)
+								return res.send({
 									status: "FAILURE",
 									message: "Unknown error",
 								});
-							res.send({
-								status: "SUCCESS",
-								message: `Admin with username ${username} added to database.`,
-							});
+							} else {
+								return res.send({
+									status: "SUCCESS",
+									message: `Admin with username ${username} added to database.`,
+								});
+							}
+							
 						},
 					);
 				}
