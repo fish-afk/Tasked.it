@@ -51,7 +51,12 @@ const refresh = async (req, res) => {
 
 
 function registerAdmin(req, res) {
-	const { username, password, email, fullname } = req.body;
+
+    const { username, password, email, fullname, admin_key } = req.body;
+    
+    if (admin_key !== process.env.ADMIN_KEY) {
+        return res.send({status: 'FAILURE', message: 'Not authorised'})
+    }
 
 	// hash the password
 	bcrypt.hash(password, SALT_ROUNDS, (err, hashedPassword) => {

@@ -4,13 +4,12 @@ mongoose.set("strictQuery", false);
 
 const uri = process.env.MONGO_DB_DATABASE_URL;
 
-mongoose.connect(uri, (err) => {
-	if (!err) console.log("Connection to mongo DB Successful! ✅");
-	else {
-		console.log("Error connecting to mongo DB ❌");
-	}
-});
-
+mongoose
+	.connect(uri)
+	.then(() => console.log("Connected to mongo db ✅"))
+	.catch((err) => {
+		console.log("Error connecting to mongo db ❌");
+	});
 
 const AdminRefreshTokenSchema = new mongoose.Schema({
 	token: { type: String, required: true, unique: true },

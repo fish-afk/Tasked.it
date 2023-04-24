@@ -1,6 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
+
+
+const SERVER_URL = "http://localhost:4455"
 
 export default function AdminLogin() {
+
+	const [logged_in, set_logged_in] = useState(false);
+
+	const login = async (username: string, password: string) => {
+			try {
+				const response = await fetch(`${SERVER_URL}/admins/login`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ username, password })
+				});
+
+				const data = await response.json();
+
+				if (response.ok) {
+					set_logged_in(true)
+				} else {
+					set_logged_in(false)
+				}
+			} catch (error: any) {
+				set_logged_in(false)
+			}
+	};
+
+
 	return (
 		<section className="vh-100 gradient-custom">
 			<div className="container py-5 h-100">
@@ -20,7 +49,7 @@ export default function AdminLogin() {
 									<div className="form-outline form-white mb-4">
 										<input
 											type="email"
-											id="typeEmailX"
+											id="username"
 											className="form-control form-control-lg"
 										/>
 										<label className="form-label" htmlFor="typeEmailX">
@@ -31,7 +60,7 @@ export default function AdminLogin() {
 									<div className="form-outline form-white mb-4">
 										<input
 											type="password"
-											id="typePasswordX"
+											id="password"
 											className="form-control form-control-lg"
 										/>
 										<label className="form-label" htmlFor="typePasswordX">
@@ -48,6 +77,7 @@ export default function AdminLogin() {
 									<button
 										className="btn btn-outline-light btn-lg px-5"
 										type="submit"
+										
 									>
 										Login
 									</button>
