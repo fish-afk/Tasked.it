@@ -5,12 +5,12 @@ const FREELANCER_JWT_SECRET = process.env.FREELANCER_JWT_SECRET;
 const ADMIN_JWT_SECRET = process.env.ADMIN_JWT_SECRET;
 const REFRESH_SECRET = process.env.REFRESH_SECRET;
 
-const createJWTtoken = (username, privs = "freelancer") => {
+const createJWTtoken = (username, privs = "Freelancer") => {
 	const date = new Date();
 	const JWT_EXPIRATION_TIME =
 		privs === "Admin"
 			? Math.floor(date.getTime() / 1000) + 60 * 10 // 10 minutes from now if Admin
-			: Math.floor(date.getTime() / 1000) + 60 * 20; // 20 minutes from now if freelancer
+			: Math.floor(date.getTime() / 1000) + 60 * 20; // 20 minutes from now if Freelancer
 
 	return jwt.sign(
 		{ username, exp: JWT_EXPIRATION_TIME, privs: privs },
@@ -18,7 +18,7 @@ const createJWTtoken = (username, privs = "freelancer") => {
 	);
 };
 
-function generateRefreshToken(username, privs = "freelancer") {
+function generateRefreshToken(username, privs = "Freelancer") {
 	const date = new Date();
 	const REFRESH_EXPIRATION_TIME = date.setMonth(date.getMonth() + 1); // 1 month from now
 
@@ -27,7 +27,7 @@ function generateRefreshToken(username, privs = "freelancer") {
 		REFRESH_SECRET,
 	);
 
-	if (privs == "freelancer") {
+	if (privs == "Freelancer") {
 		mongo_db.FreelancerRefreshToken.deleteMany(
 			{ userId: username },
 			function (err, result) {
@@ -92,7 +92,7 @@ const verifyRefreshToken = (token, username, res) => {
 			return res.status(404).send({ auth: false, message: "Token mismatch" });
 		}
 
-		if (decoded.privs == "freelancer") {
+		if (decoded.privs == "Freelancer") {
 			mongo_db.FreelancerRefreshToken.findOne({ token: token }, (err, doc) => {
 				if (err || !doc) {
 					return res.status(401).send({
@@ -152,7 +152,7 @@ const verifyRefreshToken = (token, username, res) => {
 function verifyJWT(req, res, next) {
 	// Get the user's username from the decoded token
 	const username = req.headers["username"];
-	const token = req.headers["trybae-access-token"];
+	const token = req.headers["taskedit-accesstoken"];
 	const { isadmin = false } = req.headers;
 
 	if (!token) {
@@ -184,12 +184,14 @@ function verifyJWT(req, res, next) {
 function confirmJWT(req, res) {
 	// Get the user's username from the decoded token
 	const username = req.body["username"];
-	const token = req.body["trybae-access-token"];
+    const token = req.body["taskedit-accesstoken"];
+    const { isadmin = false } = req.body;
+
 	if (!token) {
 		return res.status(401).send({ auth: false, message: "No token provided." });
 	}
 	// Verify the JWT and check that it is valid
-	jwt.verify(token, FREELANCER_JWT_SECRET, (err, decoded) => {
+	jwt.verify(token, isadmin == true ? ADMIN_JWT_SECRET : FREELANCER_JWT_SECRET, (err, decoded) => {
 		if (err) {
 			return res.status(404).send({ auth: false, message: err.message });
 		}

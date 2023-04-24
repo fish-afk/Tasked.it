@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SERVER_URL = "http://localhost:4455"
 
 export default function FreelancerLogin() {
 
+	const Navigate = useNavigate()
     const login = async (username: string, password: string) => {
         try {
             const response = await fetch(`${SERVER_URL}/freelancers/login`, {
@@ -16,10 +18,13 @@ export default function FreelancerLogin() {
 
             const data = await response.json();
 
-			if (data.status == 'SUCCESS' || data.accessToken) {
-				alert('logged')
+			if (data.status == 'SUCCESS' || (data.accessToken && data.refreshToken)) {
+				localStorage.setItem("taskedit-accesstoken", data.accessToken);
+				localStorage.setItem("taskedit-refreshtoken", data.refreshToken);
+				localStorage.setItem("username", username);
+				Navigate('/freelancer/home')
 			} else {
-				alert('wronfg')
+				alert('wrong creds')
 			}
         } catch (error: any) {
             console.log(error)

@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SERVER_URL = "http://localhost:4455"
 
 export default function AdminLogin() {
+
+	const Navigate = useNavigate()
 
     const [loggedIn, setLoggedIn] = useState(false);
 
@@ -18,11 +21,16 @@ export default function AdminLogin() {
 
             const data = await response.json();
 
-			if (data.status == 'SUCCESS' || data.accessToken) {
-				console.log(data)
+			if (data.status == 'SUCCESS' || (data.accessToken && data.refreshToken)) {
+				localStorage.setItem("taskedit-accesstoken", data.accessToken);
+				localStorage.setItem("taskedit-refreshtoken", data.refreshToken);
+				localStorage.setItem("username", username);
+				Navigate('/admin/home')
+
 			} else {
-				console.log(data)
+				alert('wrong creds')
 			}
+
         } catch (error: any) {
             console.log(error)
         }

@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 type proptypes = {
   username: string
 }
