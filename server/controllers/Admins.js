@@ -4,37 +4,43 @@ const bcrypt = require('bcrypt');
 
 const SALT_ROUNDS = 10;
 
-// function to login a user
-function login(req, res) {
-	const { username, password } = req;
-	connection.query(
+// async function to login a user
+async function login(req, res) {
+    const { username, password } = req.body;
+
+    console.log(username)
+
+	Model.connection.query(
 		"SELECT * FROM Admins WHERE username = ?",
-		username,
+		[username],
 		(err, results) => {
 			if (err) res.send({status: 'FAILURE', message: "Unknown error"});
 
 			// check if user with the given username exists in the database
-			if (results.length === 0) {
-				return res.send("Invalid username or password");
-			}
+            if (results?.length === 0) {
+                return res.send({ status: 'FAILURE', message: "Invalid username or password" });
+            } else {
+                // verify hashed password
+                const hashedPassword = results[0].password;
+                bcrypt.compare(password, hashedPassword, (err, match) => {
+                    if (err) res.send({ status: 'FAILURE', message: "Unknown error" });
+                    if (!match) {
+                        return res.send({
+                            status: "FAILURE",
+                            message: "Invalid username or password",
+                        });
+                    }
+                    
+                    // create a refresh token and an access token
+                    const refreshToken = authMiddleware.generateRefreshToken(username, "Admin");
+                    const accessToken = authMiddleware.createJWTtoken(username, "Admin");
 
-			// verify hashed password
-			const hashedPassword = results[0].password;
-			bcrypt.compare(password, hashedPassword, (err, match) => {
-				if (err) res.send({status: 'FAILURE', message: "Unknown error"});
-				if (!match) {
-					return res.send("Invalid username or password");
-				}
-
-				// create a refresh token and an access token
-				const refreshToken = authMiddleware.generateRefreshToken(username, "Admin");
-                const accessToken = authMiddleware.createJWTtoken(username, "Admin");
-
-                return res.send({
-                    "refreshtoken": refreshToken,
-                    "accesstoken": accessToken
-                })
-			});
+                    return res.send({
+                        "refreshToken": refreshToken,
+                        "accessToken": accessToken
+                    })
+                });
+            }
 		},
 	);
 }
@@ -50,7 +56,7 @@ const refresh = async (req, res) => {
 };
 
 
-function registerAdmin(req, res) {
+async function registerAdmin(req, res) {
 
     const { username, password, email, fullname, admin_key } = req.body;
     
@@ -99,7 +105,7 @@ function registerAdmin(req, res) {
 	});
 }
 
-function updateAdmin(req, res) {
+async function updateAdmin(req, res) {
 	const { username, password, email, fullname } = req.body;
 	const admin = { password, email, fullname };
 
@@ -138,7 +144,7 @@ function updateAdmin(req, res) {
 }
 
 
-function getAllAdmins(req, res) {
+async function getAllAdmins(req, res) {
 	Model.connection.query("SELECT * FROM Admins", (err, result) => {
 		if (err)
 			res.status(500).send({ status: "FAILURE", message: "Unknown error" });
@@ -146,7 +152,7 @@ function getAllAdmins(req, res) {
 	});
 }
 
-function getAdminByUsername(req, res) {
+async function getAdminByUsername(req, res) {
 	const username = req.params.username;
 
 	Model.connection.query(
@@ -167,7 +173,7 @@ function getAdminByUsername(req, res) {
 }
 
 
-function deleteAdmin(req, res) {
+async function deleteAdmin(req, res) {
 	const username = req.params.username;
 
 	Model.connection.query(

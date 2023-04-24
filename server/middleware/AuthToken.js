@@ -8,13 +8,13 @@ const REFRESH_SECRET = process.env.REFRESH_SECRET;
 const createJWTtoken = (username, privs = "freelancer") => {
 	const date = new Date();
 	const JWT_EXPIRATION_TIME =
-		privs === "admin"
-			? Math.floor(date.getTime() / 1000) + 60 * 10 // 10 minutes from now if admin
+		privs === "Admin"
+			? Math.floor(date.getTime() / 1000) + 60 * 10 // 10 minutes from now if Admin
 			: Math.floor(date.getTime() / 1000) + 60 * 20; // 20 minutes from now if freelancer
 
 	return jwt.sign(
 		{ username, exp: JWT_EXPIRATION_TIME, privs: privs },
-		privs === "admin" ? ADMIN_JWT_SECRET : FREELANCER_JWT_SECRET,
+		privs === "Admin" ? ADMIN_JWT_SECRET : FREELANCER_JWT_SECRET,
 	);
 };
 
@@ -55,7 +55,7 @@ function generateRefreshToken(username, privs = "freelancer") {
 	}
 
 
-	if (privs == "admin") {
+	if (privs == "Admin") {
 		mongo_db.AdminRefreshToken.deleteMany(
 			{ userId: username },
 			function (err, result) {
@@ -114,7 +114,7 @@ const verifyRefreshToken = (token, username, res) => {
 			});
 		}
 
-		if (decoded.privs == "admin") {
+		if (decoded.privs == "Admin") {
 			mongo_db.AdminRefreshToken.findOne({ token: token }, (err, doc) => {
 				if (err || !doc) {
 					return res.status(401).send({

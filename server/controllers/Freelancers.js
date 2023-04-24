@@ -4,40 +4,46 @@ const bcrypt = require("bcrypt");
 
 const SALT_ROUNDS = 10;
 
-// function to login a user
-function login(req, res) {
+// async function to login a user
+async function login(req, res) {
 	const { username, password } = req;
-	connection.query(
+	Model.connection.query(
 		"SELECT * FROM Freelancers WHERE username = ?",
-		username,
+		[username],
 		(err, results) => {
 			if (err) res.send({ status: "FAILURE", message: "Unknown error" });
 
 			// check if user with the given username exists in the database
-			if (results.length === 0) {
-				return res.send("Invalid username or password");
-			}
+            if (results?.length === 0) {
+                return res.send({
+                    status: "FAILURE",
+                    message: "Invalid username or password",
+                });
+            } else {
+                // verify hashed password
+                const hashedPassword = results[0].password;
+                bcrypt.compare(password, hashedPassword, (err, match) => {
+                    if (err) res.send({ status: "FAILURE", message: "Unknown error" });
+                    if (!match) {
+                        return res.send({
+                            status: "FAILURE",
+                            message: "Invalid username or password",
+                        });
+                    }
 
-			// verify hashed password
-			const hashedPassword = results[0].password;
-			bcrypt.compare(password, hashedPassword, (err, match) => {
-				if (err) res.send({ status: "FAILURE", message: "Unknown error" });
-				if (!match) {
-					return res.send("Invalid username or password");
-				}
+                    // create a refresh token and an access token
+                    const refreshToken = authMiddleware.generateRefreshToken(
+                        username,
+                        "Freelancer",
+                    );
+                    const accessToken = authMiddleware.createJWTtoken(username, "Freelancer");
 
-				// create a refresh token and an access token
-				const refreshToken = authMiddleware.generateRefreshToken(
-					username,
-					"Freelancer",
-				);
-				const accessToken = authMiddleware.createJWTtoken(username, "Freelancer");
-
-				return res.send({
-					refreshtoken: refreshToken,
-					accesstoken: accessToken,
-				});
-			});
+                    return res.send({
+                        refreshtoken: refreshToken,
+                        accesstoken: accessToken,
+                    });
+                });
+            }
 		},
 	);
 }
@@ -52,7 +58,7 @@ const refresh = async (req, res) => {
 	await authMiddleware.verifyRefreshToken(refreshToken, username, res);
 };
 
-function registerFreelancer(req, res) {
+async function registerFreelancer(req, res) {
 	const { username, password, email, fullname } = req.body;
 
 	// hash the password
@@ -96,8 +102,8 @@ function registerFreelancer(req, res) {
 	});
 }
 
-function updateFreelancer(req, res) {
-	const { usernamFreelancerssword, email, fullname } = req.body;
+async function updateFreelancer(req, res) {
+	const { username, password, email, fullname } = req.body;
 	const Freelancer = { password, email, fullname };
 
 	// check if username exists
@@ -134,7 +140,7 @@ function updateFreelancer(req, res) {
 	);
 }
 
-function getAllFreelancers(req, res) {
+async function getAllFreelancers(req, res) {
 	Model.connection.query("SELECT * FROM Freelancers", (err, result) => {
 		if (err)
 			res.status(500).send({ status: "FAILURE", message: "Unknown error" });
@@ -142,7 +148,7 @@ function getAllFreelancers(req, res) {
 	});
 }
 
-function getFreelancerByUsername(req, res) {
+async function getFreelancerByUsername(req, res) {
 	const username = req.params.username;
 
 	Model.connection.query(
@@ -162,7 +168,7 @@ function getFreelancerByUsername(req, res) {
 	);
 }
 
-function deleteFreelancer(req, res) {
+async function deleteFreelancer(req, res) {
 	const username = req.params.username;
 
 	Model.connection.query(
