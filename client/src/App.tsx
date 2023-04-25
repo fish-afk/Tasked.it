@@ -44,6 +44,7 @@ function App() {
 
 			if (data.jwt) {
 				localStorage.setItem("taskedit-accesstoken", data.jwt);
+				console.log('Refreshed !');
 			} else {
 				Nav(`/${priv}/logout`);
 			}

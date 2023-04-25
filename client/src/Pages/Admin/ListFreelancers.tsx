@@ -52,7 +52,12 @@ export default function ListFreelancers() {
 				<div className="title text-center p-3">
 					<h1>Freelancer list</h1>
 				</div>
-				<FreelancerTable freelancers={freelancers}/>
+
+				<div className="d-flex justify-content-end">
+					<button className="btn btn-primary me-5 ms-5"><b>+</b> Add New Freelancer</button>
+				</div>
+
+				<FreelancerTable freelancers={freelancers} />
 			</div>
 		</div>
 	);

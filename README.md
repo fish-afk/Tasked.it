@@ -1,5 +1,7 @@
 # Tasked.it
 
+Tasked.it is the nick name of the system.
+
 A freelancer, employee and project managing software for tech product companies. 
 
 Two main folders:

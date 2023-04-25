@@ -4,8 +4,8 @@ const uri = process.env.SQL_DATABASE_URL;
 const connection = mysql.createConnection(uri);
 
 connection.connect((err) => {
-	if (err) console.log("Error connecting to mysql db❌" + err);
-	else console.log("Connected to mysql db! ✅");
+	if (err) console.log("Error connecting to MySQL db ❌" + err);
+	else console.log("Connected to MySQL db ✅");
 });
 
 module.exports = { connection };

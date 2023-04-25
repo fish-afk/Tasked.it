@@ -180,11 +180,12 @@ async function getFreelancerByUsername(req, res) {
 }
 
 async function deleteFreelancer(req, res) {
-	const username = req.params.username;
 
+	let username = req.decoded['privs'] == 'Admin' ? req.body.username : req.decoded['username'];
+	
 	Model.connection.query(
 		"DELETE FROM Freelancers WHERE username = ?",
-		username,
+		[username],
 		(err, result) => {
 			if (err)
 				res.status(500).send({ status: "FAILURE", message: "Unknown error" });
@@ -195,7 +196,7 @@ async function deleteFreelancer(req, res) {
 			} else {
 				res.send({
 					status: "SUCCESS",
-					message: `Freelancer with username ${username} deleted from database.`,
+					message: `Freelancer with username ${username} deleted successfully.`,
 				});
 			}
 		},

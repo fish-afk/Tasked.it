@@ -17,7 +17,7 @@ router.get(
 	FreelancerController.getAllFreelancers,
 );
 router.get("/:username", FreelancerController.getFreelancerByUsername);
-router.delete("/:username", FreelancerController.deleteFreelancer);
+router.delete("/deletefreelancer", authMiddleware.verifyJWT, FreelancerController.deleteFreelancer);
 router.post("/confirmjwt", authMiddleware.confirmJWT);
 
 module.exports = router;
