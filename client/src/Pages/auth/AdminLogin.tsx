@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const SERVER_URL = "http://localhost:4455"
 
-export default function AdminLogin({setusername} : any) {
+export default function AdminLogin() {
 
 	const Navigate = useNavigate()
 
@@ -23,7 +23,7 @@ export default function AdminLogin({setusername} : any) {
 				localStorage.setItem("taskedit-accesstoken", data.accessToken);
 				localStorage.setItem("taskedit-refreshtoken", data.refreshToken);
 				localStorage.setItem("username", username);
-
+                localStorage.setItem("priv", "admins");
 				Navigate('/admin/home')
 
 			} else {
