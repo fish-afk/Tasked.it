@@ -32,7 +32,7 @@ const FreelancerTable = ({ freelancers }: Props) => {
 						<td>{freelancer.age}</td>
                         <td>{freelancer.email}</td>
                         <td><button className="btn btn-primary">Edit</button></td>
-                        <td><button className="btn btn-danger">Delete</button></td>
+                        <td><button className="btn btn-danger">Remove</button></td>
                         <td><button className="btn btn-warning">Message</button></td>
 					</tr>
 				))}
