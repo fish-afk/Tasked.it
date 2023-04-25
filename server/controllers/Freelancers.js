@@ -59,6 +59,11 @@ const refresh = async (req, res) => {
 };
 
 async function registerFreelancer(req, res) {
+
+	if (req.decoded.privs != "Admin") {
+		return res.send({ status: "FAILURE", message: "Insufficient privileges" });
+	}
+
 	const { username, password, email, fullname } = req.body;
 
 	// hash the password
@@ -141,11 +146,17 @@ async function updateFreelancer(req, res) {
 }
 
 async function getAllFreelancers(req, res) {
-	Model.connection.query("SELECT * FROM Freelancers", (err, result) => {
-		if (err)
-			res.status(500).send({ status: "FAILURE", message: "Unknown error" });
-		res.send({ status: "SUCCESS", data: result });
-	});
+
+	if (req.decoded.privs != 'Admin') {
+		return res.send({ status: 'FAILURE', message: "Insufficient privileges" });
+	} else {
+		Model.connection.query("SELECT username, fullname, email, age FROM Freelancers", (err, result) => {
+			if (err)
+				res.status(500).send({ status: "FAILURE", message: "Unknown error" });
+			res.send({ status: "SUCCESS", data: result });
+		});
+	}
+	
 }
 
 async function getFreelancerByUsername(req, res) {

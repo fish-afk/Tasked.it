@@ -110,6 +110,10 @@ async function registerAdmin(req, res) {
 }
 
 async function updateAdmin(req, res) {
+	if (req.decoded.privs != "Admin") {
+		return res.send({ status: "FAILURE", message: "Insufficient privileges" });
+	}
+
 	const { username, password, email, fullname } = req.body;
 	const admin = { password, email, fullname };
 
@@ -149,14 +153,24 @@ async function updateAdmin(req, res) {
 
 
 async function getAllAdmins(req, res) {
-	Model.connection.query("SELECT * FROM Admins", (err, result) => {
-		if (err)
-			res.status(500).send({ status: "FAILURE", message: "Unknown error" });
-		res.send({ status: "SUCCESS", data: result });
-	});
+	if (req.decoded.privs != "Admin") {
+		return res.send({ status: "FAILURE", message: "Insufficient privileges" });
+	}
+
+	Model.connection.query(
+		"SELECT username, fullname, email, employee_title FROM Admins",
+		(err, result) => {
+			if (err)
+				res.status(500).send({ status: "FAILURE", message: "Unknown error" });
+			res.send({ status: "SUCCESS", data: result });
+		},
+	);
 }
 
 async function getAdminByUsername(req, res) {
+	if (req.decoded.privs != "Admin") {
+		return res.send({ status: "FAILURE", message: "Insufficient privileges" });
+	}
 	const username = req.params.username;
 
 	Model.connection.query(
@@ -200,6 +214,68 @@ async function deleteAdmin(req, res) {
 	);
 }
 
+
+async function get_numbers(req, res) {
+	if (req.decoded.privs != "Admin") {
+		return res.send({ status: "FAILURE", message: "Insufficient privileges" });
+	} else {
+		let queries = [
+			"SELECT COUNT(*) FROM Admins",
+			"SELECT COUNT(*) FROM Freelancers",
+			"SELECT COUNT(*) FROM Projects",
+			"SELECT COUNT(*) FROM Clients",
+			"SELECT COUNT(*) FROM Tasks",
+		];
+
+		let table_names = ["Admins", "Freelancers", "Projects", "Clients", "Tasks"];
+
+		let promises = queries.map((query) => {
+			return new Promise((resolve, reject) => {
+				Model.connection.query(query, [], (err, results) => {
+					if (err) {
+						reject(err);
+					} else {
+						resolve(results[0]);
+					}
+				});
+			});
+		});
+
+		try {
+			let final_results = await Promise.all(promises);
+			let result_obj = {};
+			for (let i = 0; i < final_results.length; i++) {
+				let table_name = table_names[i];
+				if (queries[i].includes(table_name)) {
+					result_obj[table_name] = final_results[i]["COUNT(*)"];
+				}
+			}
+			return res.send({ status: "SUCCESS", result: result_obj });
+		} catch (err) {
+			return res.send({ status: "ERROR", message: "An error occurred" });
+		}
+	}
+}
+
+
+async function get_total_tasks_due_today(req, res) {
+	if (req.decoded.privs != "Admin") {
+		return res.send("Insufficient privileges");
+	} else { 
+		let query = "SELECT COUNT(*) FROM TASKS WHERE DATE(`due_date`) = CURDATE()";
+
+		Model.connection.query(query, [], (err, results) => {
+			if (results && !err) {
+				return res.send({status: "SUCCESS", result: results})
+			} else {
+				return res.send({ status: "ERROR", message: "An error occurred" });
+			}
+		})
+	}
+
+}
+
+
 module.exports = {
 	registerAdmin,
 	getAllAdmins,
@@ -207,5 +283,7 @@ module.exports = {
 	updateAdmin,
     deleteAdmin,
     login,
-    refresh
+	refresh,
+	get_numbers,
+	get_total_tasks_due_today
 };

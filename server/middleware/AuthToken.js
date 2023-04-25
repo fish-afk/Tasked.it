@@ -8,13 +8,13 @@ const REFRESH_SECRET = process.env.REFRESH_SECRET;
 const createJWTtoken = (username, privs = "Freelancer") => {
 	const date = new Date();
 	const JWT_EXPIRATION_TIME =
-		privs === "Admin"
+		privs == "Admin"
 			? Math.floor(date.getTime() / 1000) + 60 * 10 // 10 minutes from now if Admin
 			: Math.floor(date.getTime() / 1000) + 60 * 20; // 20 minutes from now if Freelancer
 
 	return jwt.sign(
 		{ username, exp: JWT_EXPIRATION_TIME, privs: privs },
-		privs === "Admin" ? ADMIN_JWT_SECRET : FREELANCER_JWT_SECRET,
+		privs == "Admin" ? ADMIN_JWT_SECRET : FREELANCER_JWT_SECRET,
 	);
 };
 
@@ -153,7 +153,7 @@ function verifyJWT(req, res, next) {
 	// Get the user's username from the decoded token
 	const username = req.headers["username"];
 	const token = req.headers["taskedit-accesstoken"];
-	const { isadmin = false } = req.headers;
+	const { isadmin } = req.headers;
 
 	if (!token) {
 		return res.status(401).send({ auth: false, message: "No token provided." });
@@ -161,7 +161,7 @@ function verifyJWT(req, res, next) {
 	// Verify the JWT and check that it is valid
 	jwt.verify(
 		token,
-		isadmin == true ? ADMIN_JWT_SECRET : FREELANCER_JWT_SECRET,
+		isadmin == "true" || isadmin == true ? ADMIN_JWT_SECRET : FREELANCER_JWT_SECRET,
 		(err, decoded) => {
 			if (err) {
 				return res.status(404).send({ auth: false, message: err.message });
@@ -191,7 +191,7 @@ function confirmJWT(req, res) {
 		return res.status(401).send({ auth: false, message: "No token provided." });
 	}
 	// Verify the JWT and check that it is valid
-	jwt.verify(token, isadmin == true ? ADMIN_JWT_SECRET : FREELANCER_JWT_SECRET, (err, decoded) => {
+	jwt.verify(token, isadmin == true || isadmin == "true" ? ADMIN_JWT_SECRET : FREELANCER_JWT_SECRET, (err, decoded) => {
 		if (err) {
 			return res.status(404).send({ auth: false, message: err.message });
 		}

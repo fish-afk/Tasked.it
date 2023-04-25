@@ -1,8 +1,49 @@
-import React from 'react'
-import Navbar from '../../Components/Navbar';
+import React, { useEffect, useState } from "react";
+import Navbar from "../../Components/Navbar";
 
+const SERVER_URL = "http://localhost:4455";
+
+interface Numbers {
+	Freelancers: number;
+	Admins: number;
+	Clients: number;
+	Projects: number;
+	Tasks: number;
+}
 
 export default function AdminHome() {
+	const [numbers, setnumbers] = useState<Numbers>();
+
+	const func = async () => {
+		const token = JSON.stringify(
+			localStorage.getItem("taskedit-accesstoken"),
+		).replaceAll('"', "");
+
+		const username = JSON.stringify(
+			localStorage.getItem("username"),
+		).replaceAll('"', "");
+
+		const response = await fetch(`${SERVER_URL}/admins/getnumbers`, {
+			method: "POST",
+			headers: {
+				"taskedit-accesstoken": token,
+				username: username,
+				isadmin: "true",
+			},
+		});
+
+		const data = await response.json();
+
+		console.log(data);
+
+		if (data.status == "SUCCESS") {
+			setnumbers(data.result);
+		}
+	};
+
+	useEffect(() => {
+		func();
+	}, []);
 
 	const getDate = () => {
 		const today = new Date();
@@ -27,19 +68,24 @@ export default function AdminHome() {
 		const formattedDate = `${day}${daySuffix(day)} ${month} ${year}`;
 
 		return formattedDate;
-	}
-	
-	const username = JSON.stringify(localStorage.getItem("username")).replaceAll('"', '');
-  return (
+	};
+
+	const username = JSON.stringify(localStorage.getItem("username")).replaceAll(
+		'"',
+		"",
+	);
+	return (
 		<div className="d-flex">
 			<Navbar priv="admin" />
 			<div className="text-center container">
-				<h1 className='p-4'>Welcome {username}.</h1>
-				<h3 className='p-2'>Todays Date: {getDate()}</h3>
-				<h3 className='p-2'>Number of current freelancers: 23</h3>
-				<h3 className='p-2'>Number of current admins: 32</h3>
-				<h3 className='p-2'>Number of active projects: 12</h3>
-				<h3 className='p-2'>Total tasks due today: 5</h3>
+				<h1 className="p-4">Welcome {username}.</h1>
+				<h3 className="p-2">Todays Date: {getDate()}</h3>
+				<h3 className="p-2">
+					Number of current freelancers: {numbers?.Freelancers}
+				</h3>
+				<h3 className="p-2">Number of current admins: {numbers?.Admins}</h3>
+				<h3 className="p-2">Number of active projects: {numbers?.Projects}</h3>
+				<h3 className="p-2">Total tasks due today: {numbers?.Tasks}</h3>
 			</div>
 		</div>
 	);
