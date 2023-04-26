@@ -32,7 +32,7 @@ const AdminTable = ({ admins }: Props) => {
 						<td>{Admin.email}</td>
 
 						<td>
-							<button className="btn btn-warning">Message</button>
+							<button className="btn btn-warning pe-5 ps-5">Message</button>
 						</td>
 					</tr>
 				))}

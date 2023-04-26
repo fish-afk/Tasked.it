@@ -1,38 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
-import RolesCheckboxList from "../../Components/RolesCheckBoxList";
-import { Role } from "../../Interfaces/Roles";
 import SERVER_URL from "../../Constants/server_url";
 
-export default function AddNewFreelancer() {
-	const [roles, setroles] = useState([]);
-	const [chosenRoles, setchosenRoles] = useState<Role[]>([]);
+export default function AddNewAdmin() {
 
 	useEffect(() => {
 		const func = async () => {
-			const token = JSON.stringify(
-				localStorage.getItem("taskedit-accesstoken"),
-			).replaceAll('"', "");
-
-			const username = JSON.stringify(
-				localStorage.getItem("username"),
-			).replaceAll('"', "");
-
-			const response = await fetch(`${SERVER_URL}/roles/getallroles`, {
-				headers: {
-					"taskedit-accesstoken": token,
-					username: username,
-					isadmin: "true",
-				},
-				method: "POST",
-			});
-
-			const data = await response.json();
-
-			console.log(data);
-			if (data.status == "SUCCESS") {
-				setroles(data.data);
-			}
+			
 		};
 
 		func();
@@ -42,8 +16,8 @@ export default function AddNewFreelancer() {
 		<div className="d-flex">
 			<Navbar priv="admin" />
 			<div className="container">
-				<div className="d-flex justify-content-center">
-					<h1>Add new freelancer</h1>
+				<div className="d-flex justify-content-center p-2">
+					<h1>Add new admin</h1>
 				</div>
 				<form className="bg-dark p-5 rounded-3">
 					<div className="row mb-4">
@@ -108,7 +82,7 @@ export default function AddNewFreelancer() {
 
 					<div className="form-outline mb-4">
 						<label className="text-white form-label" htmlFor="form6Example4">
-							Address
+							Employee title
 						</label>
 						<input
 							required
@@ -118,24 +92,47 @@ export default function AddNewFreelancer() {
 						/>
 					</div>
 
-					<div className="form-outline mb-4">
-						<label className="text-white form-label" htmlFor="form6Example6">
-							Roles (Tick the ones that apply)
-						</label>
-
-						<RolesCheckboxList
-							Roles={roles}
-							setchosenRoles={setchosenRoles}
-							chosenRoles={chosenRoles}
-						/>
+					<div className="row mb-4">
+						<div className="col">
+							<div className="form-outline">
+								<label
+									className="text-white form-label"
+									htmlFor="form6Example1"
+								>
+									Password
+								</label>
+								<input
+									required
+									type="password"
+									id="form6Example1"
+									className="form-control"
+								/>
+							</div>
+						</div>
+						<div className="col">
+							<div className="form-outline">
+								<label
+									className="text-white form-label"
+									htmlFor="form6Example1"
+								>
+									Confirm password
+								</label>
+								<input
+									required
+									type="password"
+									id="form6Example2"
+									className="form-control"
+								/>
+							</div>
+						</div>
 					</div>
 
 					<div className="d-flex justify-content-center">
 						<button
 							type="submit"
-							className="btn btn-primary btn-block mb-4 pe-5 ps-5"
+							className="btn btn-primary btn-block mb-4 pe-5 ps-5 mt-5"
 						>
-							Add Freelancer
+							Add Admin
 						</button>
 					</div>
 				</form>

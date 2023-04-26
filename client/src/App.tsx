@@ -15,6 +15,8 @@ import ListProjects from "./Pages/Admin/ListProjects";
 import ListRoles from "./Pages/Admin/ListRoles";
 
 import AddNewFreelancer from "./Pages/Admin/AddNewFreelancer";
+import AddNewAdmin from "./Pages/Admin/AddNewAdmin";
+import EditFreelancer from "./Pages/Admin/EditFreelancer";
 
 import Index from "./Pages";
 import AdminLogin from "./Pages/auth/AdminLogin";
@@ -126,6 +128,24 @@ function App() {
 						element={
 							<ProtectedRoute>
 								<AddNewFreelancer />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
+						path="/admin/newadmin"
+						element={
+							<ProtectedRoute>
+								<AddNewAdmin />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
+						path="/admin/editfreelancer"
+						element={
+							<ProtectedRoute>
+								<EditFreelancer />
 							</ProtectedRoute>
 						}
 					/>

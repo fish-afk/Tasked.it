@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
 import SERVER_URL from "../../Constants/server_url";
-
-interface Numbers {
-	Freelancers: number;
-	Admins: number;
-	Clients: number;
-	Projects: number;
-	Tasks: number;
-}
+import { Numbers } from "../../Interfaces/Numbers";
 
 export default function AdminHome() {
 	const [numbers, setnumbers] = useState<Numbers>();

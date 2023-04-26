@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
 import AdminTable from "../../Components/AdminTable";
 import SERVER_URL from "../../Constants/server_url";
+import { useNavigate } from "react-router-dom";
 
 export default function ListFreelancers() {
 	const [admins, setadmins] = useState([]);
+
+
+	const Navigate = useNavigate();
 
 	const func = async () => {
 		const token = JSON.stringify(
@@ -43,6 +47,18 @@ export default function ListFreelancers() {
 				<div className="title text-center p-3">
 					<h1>Admin list</h1>
 				</div>
+
+				<div className="d-flex justify-content-end pb-4">
+					<button
+						className="btn btn-primary me-5 ms-5"
+						onClick={() => {
+							Navigate("/admin/newadmin");
+						}}
+					>
+						<b>+</b> Add New Admin
+					</button>
+				</div>
+
 				<AdminTable admins={admins} />
 			</div>
 		</div>

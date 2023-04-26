@@ -116,6 +116,9 @@ const FreelancerTable = ({ freelancers }: Props) => {
 						<td>
 							<button className="btn btn-warning">Message</button>
 						</td>
+						<td>
+							<button className="btn btn-info">Show roles</button>
+						</td>
 					</tr>
 				))}
 			</tbody>
