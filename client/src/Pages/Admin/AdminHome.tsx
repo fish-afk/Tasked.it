@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
-
-const SERVER_URL = "http://localhost:4455";
+import SERVER_URL from "../../Constants/server_url";
 
 interface Numbers {
 	Freelancers: number;

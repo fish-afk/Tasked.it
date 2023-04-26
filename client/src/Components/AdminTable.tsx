@@ -1,11 +1,10 @@
-import React from "react";
+/* This is a TypeScript React component that defines a table to display a list of admins. It imports
+the React library and the Admin interface from a separate file. The component takes in an array of
+admins as a prop and maps over the array to display each admin's information in a table row. It also
+includes a button to message each admin. The component is exported as the default export. */
 
-interface Admin {
-	username: string;
-	fullname: string;
-	employee_title: string;
-	email: string;
-}
+import React from "react";
+import { Admin } from "../Interfaces/Admin";
 
 interface Props {
 	admins: Admin[];
@@ -31,8 +30,7 @@ const AdminTable = ({ admins }: Props) => {
 						<td>{Admin.fullname}</td>
 						<td>{Admin.employee_title}</td>
 						<td>{Admin.email}</td>
-						
-						
+
 						<td>
 							<button className="btn btn-warning">Message</button>
 						</td>

@@ -28,7 +28,7 @@ const Navbar = ({ priv }: NavProps) => {
 				<li className="nav-item">
 					<Link
 						to={`/admin/home`}
-						className="nav-link active"
+						className="nav-link text-white icon-link-hover"
 						aria-current="page"
 					>
 						<svg className="bi me-2" width="16" height="16">

@@ -1,3 +1,15 @@
+/**
+ * This is a module that contains functions for creating, verifying, and refreshing JSON Web Tokens
+ * (JWTs) for both freelancers and admins.
+ * @param username - The username of the user for whom the JWT token is being created or verified.
+ * @param [privs=Freelancer] - privs is short for "privileges" and refers to the level of access or
+ * permissions that a user has within the system. In this code, it is used to determine whether the
+ * user is an Admin or a Freelancer, and to set the expiration time for the JWT accordingly.
+ * @returns An object containing several functions related to JWT authentication and refresh tokens.
+ * These functions include creating a JWT token, generating a refresh token, verifying a refresh token,
+ * verifying a JWT token, and confirming the validity of a JWT token.
+ */
+
 const jwt = require("jsonwebtoken");
 const mongo_db = require("../models/mongo_db");
 
@@ -53,7 +65,6 @@ function generateRefreshToken(username, privs = "Freelancer") {
 		);
 		return refreshToken;
 	}
-
 
 	if (privs == "Admin") {
 		mongo_db.AdminRefreshToken.deleteMany(
@@ -161,7 +172,9 @@ function verifyJWT(req, res, next) {
 	// Verify the JWT and check that it is valid
 	jwt.verify(
 		token,
-		isadmin == "true" || isadmin == true ? ADMIN_JWT_SECRET : FREELANCER_JWT_SECRET,
+		isadmin == "true" || isadmin == true
+			? ADMIN_JWT_SECRET
+			: FREELANCER_JWT_SECRET,
 		(err, decoded) => {
 			if (err) {
 				return res.status(404).send({ auth: false, message: err.message });
@@ -184,28 +197,34 @@ function verifyJWT(req, res, next) {
 function confirmJWT(req, res) {
 	// Get the user's username from the decoded token
 	const username = req.body["username"];
-    const token = req.body["taskedit-accesstoken"];
-    const { isadmin = false } = req.body;
+	const token = req.body["taskedit-accesstoken"];
+	const { isadmin = false } = req.body;
 
 	if (!token) {
 		return res.status(401).send({ auth: false, message: "No token provided." });
 	}
 	// Verify the JWT and check that it is valid
-	jwt.verify(token, isadmin == true || isadmin == "true" ? ADMIN_JWT_SECRET : FREELANCER_JWT_SECRET, (err, decoded) => {
-		if (err) {
-			return res.status(404).send({ auth: false, message: err.message });
-		}
-		if (decoded.exp < Date.now() / 1000) {
-			return res.status(401).send("JWT has expired");
-		}
-		// If the JWT is valid, save the decoded user information in the request object
-		// so that it is available for the next middleware function
-		if (decoded.username != username) {
-			return res.status(404).send({ auth: false, message: "Token mismatch" }); // Token is not this users, but another users
-		}
+	jwt.verify(
+		token,
+		isadmin == true || isadmin == "true"
+			? ADMIN_JWT_SECRET
+			: FREELANCER_JWT_SECRET,
+		(err, decoded) => {
+			if (err) {
+				return res.status(404).send({ auth: false, message: err.message });
+			}
+			if (decoded.exp < Date.now() / 1000) {
+				return res.status(401).send("JWT has expired");
+			}
+			// If the JWT is valid, save the decoded user information in the request object
+			// so that it is available for the next middleware function
+			if (decoded.username != username) {
+				return res.status(404).send({ auth: false, message: "Token mismatch" }); // Token is not this users, but another users
+			}
 
-		return res.send({ auth: true, message: "jwt valid and working" });
-	});
+			return res.send({ auth: true, message: "jwt valid and working" });
+		},
+	);
 }
 
 module.exports = {
@@ -215,15 +234,3 @@ module.exports = {
 	generateRefreshToken,
 	confirmJWT,
 };
-
-/**
- * This is a module that contains functions for creating, verifying, and refreshing JSON Web Tokens
- * (JWTs) for both freelancers and admins.
- * @param username - The username of the user for whom the JWT token is being created or verified.
- * @param [privs=Freelancer] - privs is short for "privileges" and refers to the level of access or
- * permissions that a user has within the system. In this code, it is used to determine whether the
- * user is an Admin or a Freelancer, and to set the expiration time for the JWT accordingly.
- * @returns An object containing several functions related to JWT authentication and refresh tokens.
- * These functions include creating a JWT token, generating a refresh token, verifying a refresh token,
- * verifying a JWT token, and confirming the validity of a JWT token.
- */

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
 import AdminTable from "../../Components/AdminTable";
-
-const SERVER_URL = "http://localhost:4455";
+import SERVER_URL from "../../Constants/server_url";
 
 export default function ListFreelancers() {
 	const [admins, setadmins] = useState([]);
@@ -16,16 +15,13 @@ export default function ListFreelancers() {
 			localStorage.getItem("username"),
 		).replaceAll('"', "");
 
-		const response = await fetch(
-			`${SERVER_URL}/admins/getalladmins`,
-			{
-				headers: {
-					"taskedit-accesstoken": token,
-					username: username,
-					isadmin: "true",
-				},
+		const response = await fetch(`${SERVER_URL}/admins/getalladmins`, {
+			headers: {
+				"taskedit-accesstoken": token,
+				username: username,
+				isadmin: "true",
 			},
-		);
+		});
 
 		const data = await response.json();
 

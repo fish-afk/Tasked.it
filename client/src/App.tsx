@@ -14,6 +14,8 @@ import ListMessages from "./Pages/Admin/ListMessages";
 import ListProjects from "./Pages/Admin/ListProjects";
 import ListRoles from "./Pages/Admin/ListRoles";
 
+import AddNewFreelancer from "./Pages/Admin/AddNewFreelancer";
+
 import Index from "./Pages";
 import AdminLogin from "./Pages/auth/AdminLogin";
 import FreelancerLogin from "./Pages/auth/FreelancerLogin";
@@ -70,6 +72,7 @@ function App() {
 				<Route path="/admin">
 					<Route element={<AdminRedirect />} index />
 					<Route path="/admin/login" element={<AdminLogin />} />
+					<Route path="/admin/logout" element={<Logout accountype="admin" />} />
 					<Route
 						path="/admin/home"
 						element={
@@ -78,12 +81,55 @@ function App() {
 							</ProtectedRoute>
 						}
 					/>
-					<Route path="/admin/logout" element={<Logout accountype="admin" />} />
-					<Route path="/admin/listfreelancers" element={<ListFreelancers />} />
-					<Route path="/admin/listadmins" element={<ListAdmins />} />
-					<Route path="/admin/listprojects" element={<ListProjects />} />
-					<Route path="/admin/listmessages" element={<ListMessages />} />
-					<Route path="/admin/listroles" element={<ListRoles />} />
+					<Route
+						path="/admin/listfreelancers"
+						element={
+							<ProtectedRoute>
+								<ListFreelancers />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/admin/listadmins"
+						element={
+							<ProtectedRoute>
+								<ListAdmins />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/admin/listprojects"
+						element={
+							<ProtectedRoute>
+								<ListProjects />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/admin/listmessages"
+						element={
+							<ProtectedRoute>
+								<ListMessages />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/admin/listroles"
+						element={
+							<ProtectedRoute>
+								<ListRoles />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/admin/newfreelancer"
+						element={
+							<ProtectedRoute>
+								<AddNewFreelancer />
+							</ProtectedRoute>
+						}
+					/>
+
 					<Route path="*" element={<h1>There's nothing here: 404!</h1>} />
 				</Route>
 
