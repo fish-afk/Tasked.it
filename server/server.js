@@ -19,7 +19,7 @@ const RolesRouter = require("./routers/Roles_router");
 
 app.use("/admins", adminRouter);
 app.use("/freelancers", freelancerRouter);
-// app.use("/messages", MessagesRouter);
+ app.use("/messages", MessagesRouter);
 app.use("/roles", RolesRouter);
 
 app.get('/test', (req, res) => {

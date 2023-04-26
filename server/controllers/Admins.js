@@ -61,7 +61,7 @@ async function registerAdmin(req, res) {
     const { username, password, email, fullname, employee_title = "staff", admin_key } = req.body;
     
     if (admin_key !== process.env.ADMIN_KEY) {
-        return res.send({status: 'FAILURE', message: 'Not authorised'})
+        return res.send({status: 'FAILURE', message: 'Admin key incorrect'})
     }
 
 	// hash the password

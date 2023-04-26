@@ -1,7 +1,6 @@
 const Model = require("../models/Mysql_conn");
 const MongoDB = require("../models/mongo_db");
 
-
 function get_date() {
 	const today = new Date();
 	const day = today.getDate().toString().padStart(2, "0");
@@ -23,45 +22,72 @@ function get_time() {
 }
 
 async function send_message(req, res) {
-	const privs = req.decoded.privs;
 	const from = req.decoded["username"];
-	const to = req.body["to"];
-	const Message = req.body["message"];
-	const to_usertype = req.body["to_usertype"];
+	const { Message, to, to_usertype = "Freelancer" } = req.body;
 
-	if (
-		privs == undefined ||
-		from == undefined ||
-		to == undefined ||
-		Message == undefined ||
-		to_usertype == undefined
-	) {
+	if (!Message || !to || !to_usertype) {
 		return res.send({ status: "FAILURE", message: "Missing details" });
 	} else {
-		try {
-			const record = new MongoDB.Messages({
-				to: to,
-				to_usertype: to_usertype,
-				from: from,
-				Message: Message,
-				date_sent: get_date(),
-				time_sent: get_time(),
+		if (to_usertype == "Freelancer") {
+			const query = "SELECT * FROM Freelancers WHERE username = ?";
+
+			Model.connection.query(query, [to], async (err, results) => {
+				if (!err && results?.length > 0) {
+					try {
+						const record = new MongoDB.Messages({
+							to: to,
+							to_usertype: to_usertype,
+							from: from,
+							Message: Message,
+							date_sent: get_date(),
+							time_sent: get_time(),
+						});
+
+						await record.save();
+
+						return res.send({ status: "SUCCESS", message: "Sent!" });
+					} catch (err) {
+						console.log(err);
+						return res.send({ status: "FAILURE", message: "Try later" });
+					}
+				} else {
+					console.log(err);
+					return res.send({ status: "FAILURE", message: "No such user found" });
+				}
 			});
+		} else if (to_usertype == "Admin") {
+			const query = "SELECT * FROM Admins WHERE username = ?";
+			Model.connection.query(query, [to], async (err, results) => {
+				if (!err && results?.length > 0) {
+					try {
+						const record = new MongoDB.Messages({
+							to: to,
+							to_usertype: to_usertype,
+							from: from,
+							Message: Message,
+							date_sent: get_date(),
+							time_sent: get_time(),
+						});
 
-			await record.save();
+						await record.save();
 
-			return res.send({ status: "SUCCESS", message: "Sent!" });
-		} catch (err) {
-			return res.send({ status: "FAILURE", message: "Try later" });
+						return res.send({ status: "SUCCESS", message: "Sent!" });
+					} catch (err) {
+						console.log(err);
+						return res.send({ status: "FAILURE", message: "Try later" });
+					}
+				} else {
+					console.log(err)
+					return res.send({ status: "FAILURE", message: "No such user found" });
+				}
+			});
+		} else {
+			return res.send({ status: "FAILURE", message: "Unknown usertype given" });
 		}
 	}
 }
 
-function get_my_messages(req, res) {
-
-    
-
-}
+function get_my_messages(req, res) {}
 
 module.exports = {
 	send_message,

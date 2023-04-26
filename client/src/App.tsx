@@ -65,7 +65,7 @@ function App() {
 		}, REFRESH_AUTH_MINUTE_MS);
 
 		return () => clearInterval(interval);
-	});
+	}, []);
 	return (
 		<React.Fragment>
 			<Routes>

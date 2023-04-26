@@ -7,7 +7,6 @@ to delete the freelancer. If the deletion is successful, a success message is di
 `Swal`, and the page is reloaded. If there is an error, an error message is displayed using `Swal`,
 and the page is reloaded. */
 
-import React from "react";
 import Swal from "sweetalert2";
 import { Freelancer } from "../Interfaces/Freelancer";
 import SERVER_URL from "../Constants/server_url";
@@ -22,8 +21,10 @@ const FreelancerTable = ({ freelancers }: Props) => {
 	const [show, setShow] = useState(false);
 	const [freelancerchosen, setfreelancerchosen] = useState<Freelancer>();
 	const handleClose = () => setShow(false);
-	const handleShow = (freelancer: Freelancer) => { setShow(true);  setfreelancerchosen(freelancer)}
-
+	const handleShow = (freelancer: Freelancer) => {
+		setShow(true);
+		setfreelancerchosen(freelancer);
+	};
 
 	const delete_freelancer = (freelancer_username: string) => {
 		const msg: string = "Are you sure you want to remove this freelancer?";
@@ -132,6 +133,10 @@ const FreelancerTable = ({ freelancers }: Props) => {
 									Message
 								</Button>
 							</td>
+
+							<td>
+								<button className="btn btn-warning">See roles</button>
+							</td>
 						</tr>
 					))}
 				</tbody>
@@ -143,7 +148,7 @@ const FreelancerTable = ({ freelancers }: Props) => {
 				</Modal.Header>
 				<Modal.Body>
 					<Form>
-						<Form.Group controlId="inputField">
+						<Form.Group>
 							<Form.Label>
 								Send message to {freelancerchosen?.username}
 							</Form.Label>
@@ -151,6 +156,7 @@ const FreelancerTable = ({ freelancers }: Props) => {
 								required
 								minLength={50}
 								as="textarea"
+								id="message"
 								type="text"
 								placeholder="Enter message here"
 							/>
@@ -161,7 +167,66 @@ const FreelancerTable = ({ freelancers }: Props) => {
 					<Button variant="secondary" onClick={handleClose}>
 						Close
 					</Button>
-					<Button variant="primary" type="submit">
+					<Button
+						variant="primary"
+						onClick={async () => {
+							const message: any = (
+								document.getElementById("message") as HTMLInputElement
+							).value;
+
+							if (message?.length < 7) {
+								alert("Message not long enough");
+								return;
+							}
+							const token = JSON.stringify(
+								localStorage.getItem("taskedit-accesstoken"),
+							).replaceAll('"', "");
+
+							const username = JSON.stringify(
+								localStorage.getItem("username"),
+							).replaceAll('"', "");
+
+							const response = await fetch(
+								`${SERVER_URL}/messages/sendmessage`,
+								{
+									headers: {
+										"taskedit-accesstoken": token,
+										username: username,
+										isadmin: "true",
+										"Content-Type": "application/json",
+									},
+									method: "POST",
+									body: JSON.stringify({
+										Message: message,
+										to: freelancerchosen?.username,
+										to_usertype: "Freelancer",
+									}),
+								},
+							);
+
+							const data = await response.json();
+
+							console.log(data);
+
+							if (data.status == "SUCCESS") {
+								Swal.fire({
+									title: "Message sent",
+									timer: 3000,
+									icon: "success",
+								}).then(() => {
+									location.reload();
+								});
+							} else {
+								Swal.fire({
+									title: "An error occured, try later",
+									timer: 3000,
+									icon: "error",
+								}).then(() => {
+									location.reload();
+								});
+							}
+						}}
+					>
 						Send
 					</Button>
 				</Modal.Footer>
