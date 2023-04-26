@@ -28,7 +28,7 @@ const MessagesSchema = new mongoose.Schema({
 	from: { type: String, required: true },
 	to: { type: String, required: true },
 	to_usertype: { type: String, required: true }, // sending to admin or freelancer
-	date_sent: { type: Date },
+	date_sent: { type: String },
 	time_sent: { type: String },
 });
 

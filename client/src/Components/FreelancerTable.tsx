@@ -11,12 +11,20 @@ import React from "react";
 import Swal from "sweetalert2";
 import { Freelancer } from "../Interfaces/Freelancer";
 import SERVER_URL from "../Constants/server_url";
+import { Modal, Button, Form } from "react-bootstrap";
+import { useState } from "react";
 
 interface Props {
 	freelancers: Freelancer[];
 }
 
 const FreelancerTable = ({ freelancers }: Props) => {
+	const [show, setShow] = useState(false);
+	const [freelancerchosen, setfreelancerchosen] = useState<Freelancer>();
+	const handleClose = () => setShow(false);
+	const handleShow = (freelancer: Freelancer) => { setShow(true);  setfreelancerchosen(freelancer)}
+
+
 	const delete_freelancer = (freelancer_username: string) => {
 		const msg: string = "Are you sure you want to remove this freelancer?";
 		const txt: string =
@@ -82,47 +90,83 @@ const FreelancerTable = ({ freelancers }: Props) => {
 	};
 
 	return (
-		<table className="table table-hover table-dark p-5">
-			<thead className="thead-dark">
-				<tr>
-					<th scope="col">#</th>
-					<th scope="col">Username</th>
-					<th scope="col">Fullname</th>
-					<th scope="col">Age</th>
-					<th scope="col">Email</th>
-				</tr>
-			</thead>
-			<tbody>
-				{freelancers.map((freelancer, index) => (
-					<tr key={index}>
-						<th scope="row">{index + 1}</th>
-						<td>{freelancer.username}</td>
-						<td>{freelancer.fullname}</td>
-						<td>{freelancer.age}</td>
-						<td>{freelancer.email}</td>
-						<td>
-							<button className="btn btn-primary">Edit</button>
-						</td>
-						<td>
-							<button
-								className="btn btn-danger"
-								onClick={() => {
-									delete_freelancer(freelancer.username);
-								}}
-							>
-								Remove
-							</button>
-						</td>
-						<td>
-							<button className="btn btn-warning">Message</button>
-						</td>
-						<td>
-							<button className="btn btn-info">Show roles</button>
-						</td>
+		<div>
+			<table className="table table-hover table-dark p-5">
+				<thead className="thead-dark">
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Username</th>
+						<th scope="col">Fullname</th>
+						<th scope="col">Age</th>
+						<th scope="col">Email</th>
 					</tr>
-				))}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+					{freelancers.map((freelancer, index) => (
+						<tr key={index}>
+							<th scope="row">{index + 1}</th>
+							<td>{freelancer.username}</td>
+							<td>{freelancer.fullname}</td>
+							<td>{freelancer.age}</td>
+							<td>{freelancer.email}</td>
+							<td>
+								<button className="btn btn-primary">Edit</button>
+							</td>
+							<td>
+								<button
+									className="btn btn-danger"
+									onClick={() => {
+										delete_freelancer(freelancer.username);
+									}}
+								>
+									Remove
+								</button>
+							</td>
+							<td>
+								<Button
+									variant="warning"
+									onClick={() => {
+										handleShow(freelancer);
+									}}
+								>
+									Message
+								</Button>
+							</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+
+			<Modal show={show} onHide={handleClose} variant="dark">
+				<Modal.Header closeButton>
+					<Modal.Title>Send Message</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Form>
+						<Form.Group controlId="inputField">
+							<Form.Label>
+								Send message to {freelancerchosen?.username}
+							</Form.Label>
+							<Form.Control
+								required
+								minLength={50}
+								as="textarea"
+								type="text"
+								placeholder="Enter message here"
+							/>
+						</Form.Group>
+					</Form>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						Close
+					</Button>
+					<Button variant="primary" type="submit">
+						Send
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</div>
 	);
 };
 

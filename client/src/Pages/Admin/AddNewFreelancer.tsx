@@ -106,16 +106,39 @@ export default function AddNewFreelancer() {
 						/>
 					</div>
 
-					<div className="form-outline mb-4">
-						<label className="text-white form-label" htmlFor="form6Example4">
-							Address
-						</label>
-						<input
-							required
-							type="text"
-							id="form6Example4"
-							className="form-control"
-						/>
+					<div className="row mb-4">
+						<div className="col">
+							<div className="form-outline">
+								<label
+									className="text-white form-label"
+									htmlFor="form6Example1"
+								>
+									Password
+								</label>
+								<input
+									required
+									type="password"
+									id="form6Example1"
+									className="form-control"
+								/>
+							</div>
+						</div>
+						<div className="col">
+							<div className="form-outline">
+								<label
+									className="text-white form-label"
+									htmlFor="form6Example1"
+								>
+									Confirm password
+								</label>
+								<input
+									required
+									type="password"
+									id="form6Example2"
+									className="form-control"
+								/>
+							</div>
+						</div>
 					</div>
 
 					<div className="form-outline mb-4">

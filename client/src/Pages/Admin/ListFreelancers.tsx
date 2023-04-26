@@ -63,6 +63,8 @@ export default function ListFreelancers() {
 
 				<FreelancerTable freelancers={freelancers} />
 			</div>
+
+			
 		</div>
 	);
 }

@@ -43,7 +43,8 @@ CREATE TABLE IF NOT EXISTS `Tasks`(
     `Freelancer_id` VARCHAR(255),
     `due_date` DATE NOT NULL,
     `project_id` BIGINT UNSIGNED,
-    `price_allocation` DOUBLE NOT NULL
+    `price_allocation` DOUBLE NOT NULL,
+    `completed` TINYINT(1) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS `Projects`(
