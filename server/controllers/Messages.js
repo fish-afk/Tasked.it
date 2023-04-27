@@ -90,12 +90,11 @@ async function send_message(req, res) {
 function get_my_messages(req, res) {
 
 	const username = req.decoded['username'];
-	const usertype = req.decoded['privs'];
 
 	MongoDB.Messages.find(
 		{
-			$or: [{ from: username }, { to: username }],
-			to_usertype: usertype,
+			$or: [{ from: username }, { to: username }]
+		
 		},
 		(err, messages) => {
 			if (err) {
