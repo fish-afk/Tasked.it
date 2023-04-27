@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SERVER_URL from "../../Constants/server_url";
+import Swal from "sweetalert2";
 
 export default function AdminLogin() {
 	const Navigate = useNavigate();
@@ -24,10 +25,18 @@ export default function AdminLogin() {
 				localStorage.setItem("priv", "admins");
 				Navigate("/admin/home");
 			} else {
-				alert("wrong creds");
+				Swal.fire({
+					title: "Wrong credentials.",
+					timer: 3000,
+					icon: "error",
+				})
 			}
 		} catch (error: any) {
-			console.log(error);
+			Swal.fire({
+				title: "Unknown error. try later",
+				timer: 3000,
+				icon: "error",
+			});
 		}
 	};
 

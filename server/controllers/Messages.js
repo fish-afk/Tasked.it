@@ -87,7 +87,10 @@ async function send_message(req, res) {
 	}
 }
 
-function get_my_messages(req, res) {}
+function get_my_messages(req, res) {
+
+	
+}
 
 module.exports = {
 	send_message,

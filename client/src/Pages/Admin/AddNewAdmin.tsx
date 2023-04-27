@@ -4,7 +4,6 @@ import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
 import { AdminNew } from "../../Interfaces/AdminNew";
 
-
 export default function AddNewAdmin(): JSX.Element {
 	const [formValues, setFormValues] = useState<AdminNew>({
 		username: "",
@@ -14,18 +13,18 @@ export default function AddNewAdmin(): JSX.Element {
 		employee_title: "",
 		password: "",
 		confirm_password: "",
-		admin_key: ""
+		admin_key: "",
 	});
 
 	useEffect(() => {
-		const func = async () => { };
+		const func = async () => {};
 
 		func();
 	}, []);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		
+
 		const {
 			username,
 			password,
@@ -33,24 +32,34 @@ export default function AddNewAdmin(): JSX.Element {
 			fullname,
 			confirm_password,
 			employee_title = "staff",
-			admin_key
+			admin_key,
 		} = formValues;
-
 
 		if (password !== confirm_password) {
 			Swal.fire({
 				title: "Passwords dont match",
 				timer: 3000,
 				icon: "error",
-			})
+			});
 			return;
 		}
+
+		const token = JSON.stringify(
+			localStorage.getItem("taskedit-accesstoken"),
+		).replaceAll('"', "");
+
+		const username_ = JSON.stringify(
+			localStorage.getItem("username"),
+		).replaceAll('"', "");
 
 		try {
 			const response = await fetch(`${SERVER_URL}/admins/register`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					"taskedit-accesstoken": token,
+					username: username_,
+					isadmin: "true",
 				},
 				body: JSON.stringify({
 					username,
@@ -63,7 +72,7 @@ export default function AddNewAdmin(): JSX.Element {
 			});
 
 			const data = await response.json();
-			if (data.status == 'SUCCESS') {
+			if (data.status == "SUCCESS") {
 				Swal.fire({
 					title: "Registered successfully",
 					timer: 3000,
@@ -267,13 +276,13 @@ export default function AddNewAdmin(): JSX.Element {
 						/>
 					</div>
 
-					<div className="d-flex justify-content-center p-4"><button className="btn btn-primary" onClick={(e) => handleSubmit}>Add Admin</button></div>
+					<div className="d-flex justify-content-center p-4">
+						<button className="btn btn-primary" onClick={(e) => handleSubmit}>
+							Add Admin
+						</button>
+					</div>
 				</form>
 			</div>
 		</div>
 	);
-
 }
-					
-
-								

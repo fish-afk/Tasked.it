@@ -1,4 +1,4 @@
-/* This is a React functional component that renders a list of checkboxes for job roles. It receives an
+/* This is a React functional component that renders a list of checkboxes for freelancer roles. It receives an
 array of `Role` objects as props, along with functions to set and retrieve the chosen roles. It uses
 the `useState` hook to keep track of the currently hovered role, and displays a tooltip with the
 role's description when the user hovers over a checkbox. It also updates the chosen roles array when
@@ -15,7 +15,7 @@ interface Props {
 	chosenRoles: Role[];
 }
 
-const JobCheckboxList: React.FC<Props> = ({
+const RolesCheckboxList: React.FC<Props> = ({
 	Roles,
 	setchosenRoles,
 	chosenRoles,
@@ -92,4 +92,4 @@ const JobCheckboxList: React.FC<Props> = ({
 	);
 };
 
-export default JobCheckboxList;
+export default RolesCheckboxList;

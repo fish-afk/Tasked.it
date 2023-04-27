@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
-import RolesCheckboxList from "../../Components/RolesCheckBoxList";
-import { Role } from "../../Interfaces/Roles";
 import SERVER_URL from "../../Constants/server_url";
+import Swal from "sweetalert2";
+import { FreelancerNew } from "../../Interfaces/FreelancerNew";
+import { Role } from "../../Interfaces/Roles";
+import RolesCheckboxList from "../../Components/RolesCheckBoxList";
 
-export default function AddNewFreelancer() {
-	const [roles, setroles] = useState([]);
+export default function AddNewFreelancer(): JSX.Element {
 	const [chosenRoles, setchosenRoles] = useState<Role[]>([]);
+	const [fetchedroles, setfetchedroles] = useState([]);
 
 	useEffect(() => {
 		const func = async () => {
@@ -31,21 +33,101 @@ export default function AddNewFreelancer() {
 
 			console.log(data);
 			if (data.status == "SUCCESS") {
-				setroles(data.data);
+				setfetchedroles(data.data);
 			}
 		};
 
 		func();
 	}, []);
 
+	const [formValues, setFormValues] = useState<FreelancerNew>({
+		username: "",
+		fullname: "",
+		email: "",
+		age: "",
+		password: "",
+		confirm_password: "",
+	});
+
+	useEffect(() => {
+		const func = async () => {};
+
+		func();
+	}, []);
+
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		const { username, password, email, age, fullname, confirm_password } =
+			formValues;
+
+		if (password !== confirm_password) {
+			Swal.fire({
+				title: "Passwords dont match",
+				timer: 3000,
+				icon: "error",
+			});
+			return;
+		}
+
+		try {
+			const token = JSON.stringify(
+				localStorage.getItem("taskedit-accesstoken"),
+			).replaceAll('"', "");
+
+			const username_ = JSON.stringify(
+				localStorage.getItem("username"),
+			).replaceAll('"', "");
+
+			const response = await fetch(`${SERVER_URL}/freelancers/register`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"taskedit-accesstoken": token,
+					username: username_,
+					isadmin: "true",
+				},
+				body: JSON.stringify({
+					username,
+					password,
+					email,
+					age,
+					fullname,
+					roles: chosenRoles,
+				}),
+			});
+
+			const data = await response.json();
+			if (data.status == "SUCCESS") {
+				Swal.fire({
+					title: "Registered successfully",
+					timer: 3000,
+					icon: "success",
+				}).then(() => {
+					location.reload();
+				});
+			} else {
+				Swal.fire({
+					title: data.message,
+					timer: 3000,
+					icon: "error",
+				}).then(() => {
+					location.reload();
+				});
+			}
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
 	return (
 		<div className="d-flex">
 			<Navbar priv="admin" />
 			<div className="container">
-				<div className="d-flex justify-content-center">
+				<div className="d-flex justify-content-center p-2">
 					<h1>Add new freelancer</h1>
 				</div>
-				<form className="bg-dark p-5 rounded-3">
+				<form className="bg-dark p-5 rounded-3" onSubmit={handleSubmit}>
 					<div className="row mb-4">
 						<div className="col">
 							<div className="form-outline">
@@ -60,6 +142,13 @@ export default function AddNewFreelancer() {
 									type="text"
 									id="form6Example1"
 									className="form-control"
+									value={formValues.username}
+									onChange={(e) =>
+										setFormValues({
+											...formValues,
+											username: e.target.value,
+										})
+									}
 								/>
 							</div>
 						</div>
@@ -76,11 +165,17 @@ export default function AddNewFreelancer() {
 									type="text"
 									id="form6Example2"
 									className="form-control"
+									value={formValues.fullname}
+									onChange={(e) =>
+										setFormValues({
+											...formValues,
+											fullname: e.target.value,
+										})
+									}
 								/>
 							</div>
 						</div>
 					</div>
-
 					<div className="form-outline mb-4">
 						<label className="text-white form-label" htmlFor="form6Example5">
 							Email
@@ -90,22 +185,33 @@ export default function AddNewFreelancer() {
 							type="email"
 							id="form6Example5"
 							className="form-control"
+							value={formValues.email}
+							onChange={(e) =>
+								setFormValues({
+									...formValues,
+									email: e.target.value,
+								})
+							}
 						/>
 					</div>
-
 					<div className="form-outline mb-4">
-						<label className="text-white form-label" htmlFor="form6Example3">
+						<label className="text-white form-label" htmlFor="form6Example5">
 							Age
 						</label>
 						<input
 							required
-							maxLength={3}
-							id="form6Example3"
 							type="number"
+							id="form6Example5"
 							className="form-control"
+							value={formValues.age}
+							onChange={(e) =>
+								setFormValues({
+									...formValues,
+									age: e.target.value,
+								})
+							}
 						/>
 					</div>
-
 					<div className="row mb-4">
 						<div className="col">
 							<div className="form-outline">
@@ -120,6 +226,13 @@ export default function AddNewFreelancer() {
 									type="password"
 									id="form6Example1"
 									className="form-control"
+									value={formValues.password}
+									onChange={(e) =>
+										setFormValues({
+											...formValues,
+											password: e.target.value,
+										})
+									}
 								/>
 							</div>
 						</div>
@@ -129,13 +242,20 @@ export default function AddNewFreelancer() {
 									className="text-white form-label"
 									htmlFor="form6Example1"
 								>
-									Confirm password
+									Confirm Password
 								</label>
 								<input
 									required
 									type="password"
 									id="form6Example2"
 									className="form-control"
+									value={formValues.confirm_password}
+									onChange={(e) =>
+										setFormValues({
+											...formValues,
+											confirm_password: e.target.value,
+										})
+									}
 								/>
 							</div>
 						</div>
@@ -147,17 +267,13 @@ export default function AddNewFreelancer() {
 						</label>
 
 						<RolesCheckboxList
-							Roles={roles}
+							Roles={fetchedroles}
 							setchosenRoles={setchosenRoles}
 							chosenRoles={chosenRoles}
 						/>
 					</div>
-
-					<div className="d-flex justify-content-center">
-						<button
-							type="submit"
-							className="btn btn-primary btn-block mb-4 pe-5 ps-5"
-						>
+					<div className="d-flex justify-content-center pt-3">
+						<button className="btn btn-primary" onClick={() => handleSubmit}>
 							Add Freelancer
 						</button>
 					</div>

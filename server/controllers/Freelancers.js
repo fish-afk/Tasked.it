@@ -14,36 +14,39 @@ async function login(req, res) {
 			if (err) res.send({ status: "FAILURE", message: "Unknown error" });
 
 			// check if user with the given username exists in the database
-            if (results?.length === 0) {
-                return res.send({
-                    status: "FAILURE",
-                    message: "Invalid username or password",
-                });
-            } else {
-                // verify hashed password
-                const hashedPassword = results[0].password;
-                bcrypt.compare(password, hashedPassword, (err, match) => {
-                    if (err) res.send({ status: "FAILURE", message: "Unknown error" });
-                    if (!match) {
-                        return res.send({
-                            status: "FAILURE",
-                            message: "Invalid username or password",
-                        });
-                    }
+			if (results?.length === 0) {
+				return res.send({
+					status: "FAILURE",
+					message: "Invalid username or password",
+				});
+			} else {
+				// verify hashed password
+				const hashedPassword = results[0].password;
+				bcrypt.compare(password, hashedPassword, (err, match) => {
+					if (err) res.send({ status: "FAILURE", message: "Unknown error" });
+					if (!match) {
+						return res.send({
+							status: "FAILURE",
+							message: "Invalid username or password",
+						});
+					}
 
-                    // create a refresh token and an access token
-                    const refreshToken = authMiddleware.generateRefreshToken(
-                        username,
-                        "Freelancer",
-                    );
-                    const accessToken = authMiddleware.createJWTtoken(username, "Freelancer");
+					// create a refresh token and an access token
+					const refreshToken = authMiddleware.generateRefreshToken(
+						username,
+						"Freelancer",
+					);
+					const accessToken = authMiddleware.createJWTtoken(
+						username,
+						"Freelancer",
+					);
 
-                    return res.send({
-                        refreshtoken: refreshToken,
-                        accesstoken: accessToken,
-                    });
-                });
-            }
+					return res.send({
+						refreshtoken: refreshToken,
+						accesstoken: accessToken,
+					});
+				});
+			}
 		},
 	);
 }
@@ -59,18 +62,24 @@ const refresh = async (req, res) => {
 };
 
 async function registerFreelancer(req, res) {
-
 	if (req.decoded.privs != "Admin") {
 		return res.send({ status: "FAILURE", message: "Insufficient privileges" });
 	}
 
-	const { username, password, email, fullname } = req.body;
+	const { username, password, email, fullname, roles, age } = req.body;
+
+	if (roles?.length < 1) {
+		return res.send({
+			status: "FAILURE",
+			message: "Need atleast 1 role to be set",
+		});
+	}
 
 	// hash the password
 	bcrypt.hash(password, SALT_ROUNDS, (err, hashedPassword) => {
 		if (err) throw err;
 
-		const Freelancer = { username, password: hashedPassword, email, fullname };
+		const Freelancer = { username, password: hashedPassword, email, fullname, age };
 
 		// check if username exists
 		Model.connection.query(
@@ -90,15 +99,38 @@ async function registerFreelancer(req, res) {
 						"INSERT INTO Freelancers SET ?",
 						Freelancer,
 						(err, result) => {
-							if (err)
+							if (err) {
+								console.log(err)
 								res.status(500).send({
 									status: "FAILURE",
 									message: "Unknown error",
 								});
-							res.send({
-								status: "SUCCESS",
-								message: `Freelancer with username ${username} added to database.`,
-							});
+							} else {
+								//set roles
+								for (let i = 0; i < roles?.length; i++) {
+									let set = {
+										freelancer: username,
+										role: roles[i]?.id,
+									};
+									Model.connection.query(
+										"INSERT INTO freelancerRoles SET ?",
+										set,
+										(err, ress) => {
+											if (err) {
+												res.status(500).send({
+													status: "FAILURE",
+													message: "Error setting roles.",
+												});
+											} else {
+												return res.send({
+													status: "SUCCESS",
+													message: "Registered successfully",
+												});
+											}
+										},
+									);
+								}
+							}
 						},
 					);
 				}
@@ -146,17 +178,18 @@ async function updateFreelancer(req, res) {
 }
 
 async function getAllFreelancers(req, res) {
-
-	if (req.decoded.privs != 'Admin') {
-		return res.send({ status: 'FAILURE', message: "Insufficient privileges" });
+	if (req.decoded.privs != "Admin") {
+		return res.send({ status: "FAILURE", message: "Insufficient privileges" });
 	} else {
-		Model.connection.query("SELECT username, fullname, email, age FROM Freelancers", (err, result) => {
-			if (err)
-				res.status(500).send({ status: "FAILURE", message: "Unknown error" });
-			res.send({ status: "SUCCESS", data: result });
-		});
+		Model.connection.query(
+			"SELECT username, fullname, email, age FROM Freelancers",
+			(err, result) => {
+				if (err)
+					res.status(500).send({ status: "FAILURE", message: "Unknown error" });
+				res.send({ status: "SUCCESS", data: result });
+			},
+		);
 	}
-	
 }
 
 async function getFreelancerByUsername(req, res) {
@@ -180,9 +213,11 @@ async function getFreelancerByUsername(req, res) {
 }
 
 async function deleteFreelancer(req, res) {
+	let username =
+		req.decoded["privs"] == "Admin"
+			? req.body.username
+			: req.decoded["username"];
 
-	let username = req.decoded['privs'] == 'Admin' ? req.body.username : req.decoded['username'];
-	
 	Model.connection.query(
 		"DELETE FROM Freelancers WHERE username = ?",
 		[username],

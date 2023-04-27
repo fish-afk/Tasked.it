@@ -135,7 +135,7 @@ const FreelancerTable = ({ freelancers }: Props) => {
 							</td>
 
 							<td>
-								<button className="btn btn-warning">See roles</button>
+								<button className="btn btn-warning">See details</button>
 							</td>
 						</tr>
 					))}
