@@ -81,7 +81,7 @@ const Navbar = ({ priv }: NavProps) => {
 			<hr />
 			<div
 				className="container text-white btn btn-primary mb-3"
-				onClick={() => {}}
+				onClick={() => {Navigate('/admin/editprofile')}}
 			>
 				<h3>Edit Profile</h3>
 			</div>

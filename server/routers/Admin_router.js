@@ -5,7 +5,7 @@ const authMiddleware = require('../middleware/AuthToken');
 
 router.post("/login", adminController.login);
 router.post("/refresh", adminController.refresh);
-router.post("/register", adminController.registerAdmin);
+router.post("/register", authMiddleware.verifyJWT, adminController.registerAdmin);
 router.put("/update", authMiddleware.verifyJWT, adminController.updateAdmin);
 router.get(
 	"/getAllAdmins",
@@ -20,6 +20,6 @@ router.get(
 router.delete("/:username", adminController.deleteAdmin);
 router.post("/confirmjwt", authMiddleware.confirmJWT);
 router.post("/getnumbers", authMiddleware.verifyJWT, adminController.get_numbers);
-router.post("/gettasksduetoday",authMiddleware.verifyJWT, adminController.get_total_tasks_due_today,);
+router.post("/gettasksduetoday",authMiddleware.verifyJWT, adminController.get_total_tasks_due_today);
 
 module.exports = router;

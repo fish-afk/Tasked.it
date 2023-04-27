@@ -89,7 +89,24 @@ async function send_message(req, res) {
 
 function get_my_messages(req, res) {
 
-	
+	const username = req.decoded['username'];
+	const usertype = req.decoded['privs'];
+
+	MongoDB.Messages.find(
+		{
+			$or: [{ from: username }, { to: username }],
+			to_usertype: usertype,
+		},
+		(err, messages) => {
+			if (err) {
+				console.log(err)
+				return res.send({status: 'FAILURE', message: 'Unknown error'})
+			} else {
+				return res.send({ status: "SUCCESS", data: messages });
+			}
+		},
+	);
+
 }
 
 module.exports = {

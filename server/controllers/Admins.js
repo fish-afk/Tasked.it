@@ -117,6 +117,10 @@ async function updateAdmin(req, res) {
 	const { username, password, email, fullname } = req.body;
 	const admin = { password, email, fullname };
 
+	if (req.decoded.username != username) {
+		return res.send({ status: "FAILURE", message: "username mismatch. You cant update another admins profile." });
+	}
+
 	// check if username exists
 	Model.connection.query(
 		"SELECT * FROM Admins WHERE username = ?",

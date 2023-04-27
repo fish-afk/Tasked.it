@@ -5,6 +5,7 @@ const authMiddleware = require("../middleware/AuthToken");
 
 
 router.post("/sendmessage", authMiddleware.verifyJWT, MessagesController.send_message);
+router.get("/getmymessages", authMiddleware.verifyJWT, MessagesController.get_my_messages);
 
 
 module.exports = router;
