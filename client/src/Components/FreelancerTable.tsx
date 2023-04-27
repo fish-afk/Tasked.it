@@ -213,17 +213,13 @@ const FreelancerTable = ({ freelancers }: Props) => {
 									title: "Message sent",
 									timer: 3000,
 									icon: "success",
-								}).then(() => {
-									location.reload();
-								});
+								})
 							} else {
 								Swal.fire({
 									title: "An error occured, try later",
 									timer: 3000,
 									icon: "error",
-								}).then(() => {
-									location.reload();
-								});
+								})
 							}
 						}}
 					>

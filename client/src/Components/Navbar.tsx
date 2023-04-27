@@ -79,11 +79,22 @@ const Navbar = ({ priv }: NavProps) => {
 				</li>
 			</ul>
 			<hr />
+
 			<div
 				className="container text-white btn btn-primary mb-3"
-				onClick={() => {Navigate('/admin/editprofile')}}
+				onClick={() => {
+					Navigate("/admin/editprofile");
+				}}
 			>
-				<h3>Edit Profile</h3>
+				<h4>Edit Profile</h4>
+			</div>
+			<div
+				className="container text-dark btn btn-warning mb-3"
+				onClick={() => {
+					Navigate("/admin/changepassword");
+				}}
+			>
+				<h4>Change Password</h4>
 			</div>
 			<div
 				className="container text-white btn btn-danger"
@@ -102,7 +113,7 @@ const Navbar = ({ priv }: NavProps) => {
 					});
 				}}
 			>
-				<h3>Logout</h3>
+				<h4>Logout</h4>
 			</div>
 		</div>
 	) : (

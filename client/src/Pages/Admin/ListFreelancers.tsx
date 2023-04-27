@@ -43,7 +43,7 @@ export default function ListFreelancers() {
 	}, []);
 
 	return (
-		<div className="d-flex">
+		<div className="d-flex " style={{ height: "100vh" }}>
 			<Navbar priv="admin" />
 			<div className="container">
 				<div className="title text-center p-3">
@@ -63,8 +63,6 @@ export default function ListFreelancers() {
 
 				<FreelancerTable freelancers={freelancers} />
 			</div>
-
-			
 		</div>
 	);
 }

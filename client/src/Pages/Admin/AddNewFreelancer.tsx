@@ -130,7 +130,7 @@ export default function AddNewFreelancer(): JSX.Element {
 	};
 
 	return (
-		<div className="d-flex">
+		<div className="d-flex " style={{ height: "100vh" }}>
 			<Navbar priv="admin" />
 			<div className="container">
 				<div className="d-flex justify-content-center p-2">
@@ -208,6 +208,8 @@ export default function AddNewFreelancer(): JSX.Element {
 							Age
 						</label>
 						<input
+							min={10}
+							max={150}
 							required
 							type="number"
 							id="form6Example5"
@@ -233,6 +235,7 @@ export default function AddNewFreelancer(): JSX.Element {
 								<input
 									required
 									type="password"
+									minLength={8}
 									id="form6Example1"
 									className="form-control"
 									value={formValues.password}
@@ -256,6 +259,7 @@ export default function AddNewFreelancer(): JSX.Element {
 								<input
 									required
 									type="password"
+									minLength={8}
 									id="form6Example2"
 									className="form-control"
 									value={formValues.confirm_password}

@@ -2,37 +2,28 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
-import { EditAdmin } from "../../Interfaces/EditAdminProfile";
+import { ChangePasssword } from "../../Interfaces/changePassword";
 
-export default function EditAdminProfile(): JSX.Element {
-	const [formValues, setFormValues] = useState<EditAdmin>({
-		username: "",
-		fullname: "",
-		email: "",
-		age: "",
-		employee_title: "",
+export default function ChangePassword(): JSX.Element {
+	const [formValues, setFormValues] = useState<ChangePasssword>({
+		current_password: "",
+		new_password: "",
+		confirm_new_password: "",
 	});
-
-	useEffect(() => {
-		const func = async () => {
-			
-		};
-
-		func();
-	}, []);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		const {
-			username,
-			email,
-			age,
-			fullname,
-			employee_title = "staff",
-		} = formValues;
+		const { current_password, new_password, confirm_new_password } = formValues;
 
-		
+		if (new_password !== confirm_new_password) {
+			Swal.fire({
+				title: "New Passwords Dont match",
+				timer: 3000,
+				icon: "error",
+			});
+			return;
+		}
 
 		const token = JSON.stringify(
 			localStorage.getItem("taskedit-accesstoken"),
@@ -43,8 +34,8 @@ export default function EditAdminProfile(): JSX.Element {
 		).replaceAll('"', "");
 
 		try {
-			const response = await fetch(`${SERVER_URL}/admins/update`, {
-				method: "PUT",
+			const response = await fetch(`${SERVER_URL}/admins/changepassword`, {
+				method: "PATCH",
 				headers: {
 					"Content-Type": "application/json",
 					"taskedit-accesstoken": token,
@@ -52,18 +43,15 @@ export default function EditAdminProfile(): JSX.Element {
 					isadmin: "true",
 				},
 				body: JSON.stringify({
-					username,
-					age,
-					email,
-					fullname,
-					employee_title
+					current_password,
+					new_password,
 				}),
 			});
 
 			const data = await response.json();
 			if (data.status == "SUCCESS") {
 				Swal.fire({
-					title: "Registered successfully",
+					title: "Changed Password successfully",
 					timer: 3000,
 					icon: "success",
 				}).then(() => {
@@ -90,71 +78,23 @@ export default function EditAdminProfile(): JSX.Element {
 				<div className="d-flex justify-content-center p-4">
 					<h1>Update your details</h1>
 				</div>
-				
+
 				<form className="bg-dark p-5 rounded-3" onSubmit={handleSubmit}>
-					<div className="row mb-4">
-						<div className="col">
-							<div className="form-outline">
-								<label
-									className="text-white form-label"
-									htmlFor="form6Example1"
-								>
-									Username
-								</label>
-								<input
-									required
-									type="text"
-									id="form6Example1"
-									className="form-control"
-									value={formValues.username}
-									onChange={(e) =>
-										setFormValues({
-											...formValues,
-											username: e.target.value,
-										})
-									}
-								/>
-							</div>
-						</div>
-						<div className="col">
-							<div className="form-outline">
-								<label
-									className="text-white form-label"
-									htmlFor="form6Example1"
-								>
-									Fullname
-								</label>
-								<input
-									required
-									type="text"
-									id="form6Example2"
-									className="form-control"
-									value={formValues.fullname}
-									onChange={(e) =>
-										setFormValues({
-											...formValues,
-											fullname: e.target.value,
-										})
-									}
-								/>
-							</div>
-						</div>
-					</div>
-
 					<div className="form-outline mb-4">
 						<label className="text-white form-label" htmlFor="form6Example5">
-							Email
+							Current Password
 						</label>
 						<input
 							required
-							type="email"
+							type="password"
+							minLength={8}
 							id="form6Example5"
 							className="form-control"
-							value={formValues.email}
+							value={formValues.current_password}
 							onChange={(e) =>
 								setFormValues({
 									...formValues,
-									email: e.target.value,
+									current_password: e.target.value,
 								})
 							}
 						/>
@@ -162,37 +102,39 @@ export default function EditAdminProfile(): JSX.Element {
 
 					<div className="form-outline mb-4">
 						<label className="text-white form-label" htmlFor="form6Example5">
-							Age
+							New Password
 						</label>
 						<input
 							required
-							type="number"
+							type="password"
+							minLength={8}
 							id="form6Example5"
 							className="form-control"
-							value={formValues.age}
+							value={formValues.new_password}
 							onChange={(e) =>
 								setFormValues({
 									...formValues,
-									age: e.target.value,
+									new_password: e.target.value,
 								})
 							}
 						/>
 					</div>
 
 					<div className="form-outline mb-4">
-						<label className="text-white form-label" htmlFor="form6Example1">
-							Employee title
+						<label className="text-white form-label" htmlFor="form6Example5">
+							Confirm New Password
 						</label>
 						<input
 							required
-							type="text"
-							id="form6Example2"
+							type="password"
+							minLength={8}
+							id="form6Example5"
 							className="form-control"
-							value={formValues.employee_title}
+							value={formValues.confirm_new_password}
 							onChange={(e) =>
 								setFormValues({
 									...formValues,
-									employee_title: e.target.value,
+									confirm_new_password: e.target.value,
 								})
 							}
 						/>
@@ -200,7 +142,7 @@ export default function EditAdminProfile(): JSX.Element {
 
 					<div className="d-flex justify-content-center p-4">
 						<button className="btn btn-primary" onClick={(e) => handleSubmit}>
-							SAVE
+							CHANGE
 						</button>
 					</div>
 				</form>

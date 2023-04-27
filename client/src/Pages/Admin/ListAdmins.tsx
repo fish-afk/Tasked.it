@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 export default function ListFreelancers() {
 	const [admins, setadmins] = useState([]);
 
-
 	const Navigate = useNavigate();
 
 	const func = async () => {
@@ -41,7 +40,7 @@ export default function ListFreelancers() {
 	}, []);
 
 	return (
-		<div className="d-flex">
+		<div className="d-flex " style={{ height: "100vh" }}>
 			<Navbar priv="admin" />
 			<div className="container">
 				<div className="title text-center p-3">

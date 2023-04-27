@@ -29,7 +29,7 @@ export default function AdminLogin() {
 					title: "Wrong credentials.",
 					timer: 3000,
 					icon: "error",
-				})
+				});
 			}
 		} catch (error: any) {
 			Swal.fire({
@@ -82,6 +82,7 @@ export default function AdminLogin() {
 											<input
 												required
 												type="password"
+									
 												id="password"
 												className="form-control form-control-lg"
 											/>

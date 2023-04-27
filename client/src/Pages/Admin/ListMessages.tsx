@@ -3,11 +3,13 @@ import Navbar from "../../Components/Navbar";
 import { message } from "../../Interfaces/Messages";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
+import { TbInboxOff } from "react-icons/tb";
 
 export default function ListMessages() {
 	const [messages, setmessages] = useState<message[]>([]);
 	const [loading, setloading] = useState<boolean>(false);
-	
+	const [sentMessages, setSentMessages] = useState<message[]>([]);
+	const [receivedMessages, setReceivedMessages] = useState<message[]>([]);
 
 	useEffect(() => {
 		const token = JSON.stringify(
@@ -51,15 +53,20 @@ export default function ListMessages() {
 		setloading(false);
 	}, []);
 
+	useEffect(() => {
+		setSentMessages(
+			messages.filter((msg) => msg.from === localStorage.getItem("username")),
+		);
+		setReceivedMessages(
+			messages.filter((msg) => msg.to === localStorage.getItem("username")),
+		);
+	}, [messages]);
+
 	return (
-		<div className="d-flex">
+		<div className="d-flex " style={{ height: "100vh" }}>
 			<Navbar priv="admin" />
 			<div className="container">
-				<div className="d-flex justify-content-center p-2">
-					<h3>Message Inbox</h3>
-				</div>
-
-				<div className="d-flex justify-content-center p-2">
+				<div className="d-flex justify-content-center p-5">
 					<button
 						className="btn btn-primary ps-5 pe-5 m-3 mt-2 w-25"
 						onClick={() => {
@@ -90,9 +97,78 @@ export default function ListMessages() {
 					</button>
 				</div>
 
-				<div id="recieved">recieved</div>
+				<div id="recieved">
+					<div className="d-flex justify-content-center pb-5">
+						<h2>Received messages</h2>
+					</div>
 
-				<div id="sent">sent</div>
+					{receivedMessages.length < 1 ? (
+						<div className="d-flex m-5 justify-content-center">
+							<h2>
+								You have no messages recieved in the past
+								<br />
+								<div className="d-flex m-5 justify-content-center">
+									<TbInboxOff fontSize={100} color="red" />
+								</div>
+							</h2>
+						</div>
+					) : (
+						<div className="row row-cols-1 row-cols-md-3 g-4">
+							{receivedMessages.map((msg) => (
+								<div key={msg._id} className="col">
+									<div className="card h-100 message">
+										<div className="card-body">
+											<h5 className="card-title">From: {msg.from}</h5>
+											<h6 className="card-subtitle mb-2 text-muted">
+												Date: {msg.date_sent}
+											</h6>
+											<p className="card-text">{msg.Message}</p>
+										</div>
+									</div>
+								</div>
+							))}
+						</div>
+					)}
+				</div>
+
+				<div id="sent">
+					<div className="d-flex justify-content-center pb-5">
+						<h2>Sent messages</h2>
+					</div>
+
+					{sentMessages.length < 1 ? (
+						<div className="d-flex m-5 justify-content-center">
+							<h2>
+								You have no messages sent to anyone
+								<br />
+								<div className="d-flex m-5 justify-content-center">
+									<TbInboxOff fontSize={100} color="red" />
+								</div>
+							</h2>
+						</div>
+					) : (
+						<div className="row row-cols-1 row-cols-md-3 g-4">
+							{sentMessages.map((msg) => (
+								<div key={msg._id} className="col">
+									<div className="card h-100 message">
+										<div className="card-body">
+											<h5 className="card-title">To: {msg.to}</h5>
+											<h6 className="card-subtitle mb-2 text-muted">
+												Date: {msg.date_sent}
+											</h6>
+											<h6 className="card-subtitle mb-2 text-muted">
+												Time: {msg.time_sent}
+											</h6>
+											<p className="card-text">
+												<b>Message:</b> {msg.Message}
+											</p>
+										</div>
+									</div>
+								</div>
+							))}
+						</div>
+					)}
+				</div>
 			</div>
 		</div>
 	);

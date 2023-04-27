@@ -59,7 +59,7 @@ export default function AdminHome() {
 			},
 		],
 	});
-	
+
 	const func = async () => {
 		const token = JSON.stringify(
 			localStorage.getItem("taskedit-accesstoken"),
@@ -121,7 +121,7 @@ export default function AdminHome() {
 		"",
 	);
 	return (
-		<div className="d-flex">
+		<div className="d-flex " style={{ height: "100vh" }}>
 			<Navbar priv="admin" />
 			<div className="text-center container">
 				<h1 className="p-4">Welcome {username}.</h1>
@@ -140,8 +140,6 @@ export default function AdminHome() {
 						<LineChart chartData={userData} />
 					</div>
 				</div>
-
-				
 			</div>
 		</div>
 	);
