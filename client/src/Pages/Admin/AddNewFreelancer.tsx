@@ -70,6 +70,15 @@ export default function AddNewFreelancer(): JSX.Element {
 			return;
 		}
 
+		if (chosenRoles?.length < 1) {
+			Swal.fire({
+				title: "Choose atleast 1 role",
+				timer: 3000,
+				icon: "error",
+			});
+			return;
+		}
+
 		try {
 			const token = JSON.stringify(
 				localStorage.getItem("taskedit-accesstoken"),
@@ -277,6 +286,15 @@ export default function AddNewFreelancer(): JSX.Element {
 							Add Freelancer
 						</button>
 					</div>
+
+					<div
+						id="recaptcha"
+						className="g-recaptcha"
+						data-sitekey="6LdjmMElAAAAABfEmkPagcUOBmCcuYlUkVYVyVHO"
+						data-callback="onSubmit"
+						data-size="invisible"
+					></div>
+					<script src="https://www.google.com/recaptcha/api.js"></script>
 				</form>
 			</div>
 		</div>

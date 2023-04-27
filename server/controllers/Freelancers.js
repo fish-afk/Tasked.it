@@ -61,7 +61,7 @@ const refresh = async (req, res) => {
 	await authMiddleware.verifyRefreshToken(refreshToken, username, res);
 };
 
-async function registerFreelancer(req, res) {
+function registerFreelancer(req, res) {
 	if (req.decoded.privs != "Admin") {
 		return res.send({ status: "FAILURE", message: "Insufficient privileges" });
 	}
@@ -77,63 +77,88 @@ async function registerFreelancer(req, res) {
 
 	// hash the password
 	bcrypt.hash(password, SALT_ROUNDS, (err, hashedPassword) => {
-		if (err) throw err;
+		if (err) {
+			console.log(err);
+			return res.status(500).send({
+				status: "FAILURE",
+				message: "Unknown error",
+			});
+		}
 
-		const Freelancer = { username, password: hashedPassword, email, fullname, age };
+		const Freelancer = {
+			username,
+			password: hashedPassword,
+			email,
+			fullname,
+			age,
+		};
+		let count = 0;
 
 		// check if username exists
 		Model.connection.query(
 			"SELECT * FROM Freelancers WHERE username = ?",
 			username,
 			(err, result) => {
-				if (err)
-					res.status(500).send({ status: "FAILURE", message: "Unknown error" });
+				if (err) {
+					console.log(err);
+					return res.status(500).send({
+						status: "FAILURE",
+						message: "Unknown error",
+					});
+				}
+
 				if (result.length !== 0) {
-					res.status(400).send({
+					return res.status(400).send({
 						status: "FAILURE",
 						message: `Username ${username} already exists.`,
 					});
-				} else {
-					// insert the new Freelancer
-					Model.connection.query(
-						"INSERT INTO Freelancers SET ?",
-						Freelancer,
-						(err, result) => {
-							if (err) {
-								console.log(err)
-								res.status(500).send({
-									status: "FAILURE",
-									message: "Unknown error",
-								});
-							} else {
-								//set roles
-								for (let i = 0; i < roles?.length; i++) {
-									let set = {
-										freelancer: username,
-										role: roles[i]?.id,
-									};
-									Model.connection.query(
-										"INSERT INTO freelancerRoles SET ?",
-										set,
-										(err, ress) => {
-											if (err) {
-												res.status(500).send({
-													status: "FAILURE",
-													message: "Error setting roles.",
-												});
-											} else {
-												return res.send({
-													status: "SUCCESS",
-													message: "Registered successfully",
-												});
-											}
-										},
-									);
-								}
-							}
-						},
-					);
 				}
+
+				// insert the new Freelancer
+				Model.connection.query(
+					"INSERT INTO Freelancers SET ?",
+					Freelancer,
+					(err, result) => {
+						if (err) {
+							console.log(err);
+							return res.status(500).send({
+								status: "FAILURE",
+								message: "Unknown error",
+							});
+						}
+
+						// set roles
+						for (let i = 0; i < roles?.length; i++) {
+							let set = {
+								freelancer: username,
+								role: roles[i]?.id,
+							};
+
+							Model.connection.query(
+								"INSERT INTO freelancerRoles SET ?",
+								set,
+								(err, ress) => {
+									if (err) {
+										console.log(err);
+										return res.status(500).send({
+											status: "FAILURE",
+											message: "Error setting roles.",
+										});
+									}
+
+									count++;
+
+									if (count === roles.length) {
+										return res.send({
+											status: "SUCCESS",
+											message: "Registered successfully",
+										});
+									}
+								},
+							);
+						}
+					},
+				);
 			},
 		);
 	});

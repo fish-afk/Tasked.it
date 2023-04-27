@@ -66,7 +66,7 @@ async function registerAdmin(req, res) {
 
 	// hash the password
 	bcrypt.hash(password, SALT_ROUNDS, (err, hashedPassword) => {
-		if (err) throw err;
+		if (err) console.log(err)
 
 		const admin = { username, password: hashedPassword, email, fullname, employee_title };
 
