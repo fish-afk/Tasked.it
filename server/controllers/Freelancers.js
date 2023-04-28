@@ -21,7 +21,7 @@ async function login(req, res) {
 				});
 			} else {
 				// verify hashed password
-				const hashedPassword = results[0].password;
+				const hashedPassword = results[0]?.password;
 				bcrypt.compare(password, hashedPassword, (err, match) => {
 					if (err) res.send({ status: "FAILURE", message: "Unknown error" });
 					if (!match) {
@@ -165,8 +165,8 @@ function registerFreelancer(req, res) {
 }
 
 async function updateFreelancer(req, res) {
-	const { username, password, email, fullname } = req.body;
-	const Freelancer = { password, email, fullname };
+	const { username, email, fullname, roles, age } = req.body;
+	const Freelancer = { password, email, fullname, age };
 
 	// check if username exists
 	Model.connection.query(
@@ -186,15 +186,49 @@ async function updateFreelancer(req, res) {
 					"UPDATE Freelancers SET ? WHERE username = ?",
 					[Freelancer, username],
 					(err, result) => {
-						if (err)
+						if (err) {
 							res.status(500).send({
 								status: "FAILURE",
 								message: "Unknown error",
 							});
-						res.send({
-							status: "SUCCESS",
-							message: `Freelancer with username ${username} updated.`,
-						});
+						} else {
+							if (roles?.length > 1) {
+								for (let i = 0; i < roles?.length; i++) {
+									let set = {
+										freelancer: username,
+										role: roles[i]?.id,
+									};
+
+									Model.connection.query(
+										"INSERT INTO freelancerRoles SET ?",
+										set,
+										(err, ress) => {
+											if (err) {
+												console.log(err);
+												return res.status(500).send({
+													status: "FAILURE",
+													message: "Error setting roles.",
+												});
+											}
+
+											count++;
+
+											if (count === roles.length) {
+												return res.send({
+													status: "SUCCESS",
+													message: "Updated successfully",
+												});
+											}
+										},
+									);
+								}
+							} else {
+								return res.send({
+									status: "SUCCESS",
+									message: "Updated successfully",
+								});
+							}
+						}
 					},
 				);
 			}

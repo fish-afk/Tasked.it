@@ -6,7 +6,7 @@ import { EditAdmin } from "../../Interfaces/EditAdminProfile";
 
 export default function EditAdminProfile(): JSX.Element {
 	const [formValues, setFormValues] = useState<EditAdmin>({
-		username: "",
+		
 		fullname: "",
 		email: "",
 		age: "",
@@ -25,7 +25,7 @@ export default function EditAdminProfile(): JSX.Element {
 		e.preventDefault();
 
 		const {
-			username,
+
 			email,
 			age,
 			fullname,
@@ -52,7 +52,7 @@ export default function EditAdminProfile(): JSX.Element {
 					isadmin: "true",
 				},
 				body: JSON.stringify({
-					username,
+					username: username_,
 					age,
 					email,
 					fullname,
@@ -93,29 +93,7 @@ export default function EditAdminProfile(): JSX.Element {
 				
 				<form className="bg-dark p-5 rounded-3" onSubmit={handleSubmit}>
 					<div className="row mb-4">
-						<div className="col">
-							<div className="form-outline">
-								<label
-									className="text-white form-label"
-									htmlFor="form6Example1"
-								>
-									Username
-								</label>
-								<input
-									required
-									type="text"
-									id="form6Example1"
-									className="form-control"
-									value={formValues.username}
-									onChange={(e) =>
-										setFormValues({
-											...formValues,
-											username: e.target.value,
-										})
-									}
-								/>
-							</div>
-						</div>
+						
 						<div className="col">
 							<div className="form-outline">
 								<label

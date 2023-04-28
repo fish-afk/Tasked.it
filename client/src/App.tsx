@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import React from "react";
 
+import "./Styles/App.css";
+
 import AdminHome from "./Pages/Admin/AdminHome";
 import FreelancerHome from "./Pages/Freelancer/FreelancerHome";
 

@@ -21,7 +21,7 @@ async function login(req, res) {
                 return res.send({ status: 'FAILURE', message: "Invalid username or password" });
             } else {
                 // verify hashed password
-                const hashedPassword = results[0].password;
+                const hashedPassword = results[0]?.password;
                 bcrypt.compare(password, hashedPassword, (err, match) => {
                     if (err) res.send({ status: 'FAILURE', message: "Unknown error" });
                     if (!match) {
@@ -114,8 +114,8 @@ async function updateAdmin(req, res) {
 		return res.send({ status: "FAILURE", message: "Insufficient privileges" });
 	}
 
-	const { username, password, email, fullname } = req.body;
-	const admin = { password, email, fullname };
+	const { username, email, fullname, age, employee_title } = req.body;
+	const admin = { email, fullname, age, employee_title };
 
 	if (req.decoded.username != username) {
 		return res.send({ status: "FAILURE", message: "username mismatch. You cant update another admins profile." });

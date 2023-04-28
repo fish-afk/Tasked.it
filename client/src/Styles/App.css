@@ -40,3 +40,8 @@
 button {
   font-size: calc(10px + 2vmin);
 }
+
+.container-fluid {
+  max-height: 75vh;
+  overflow-y: scroll;
+}

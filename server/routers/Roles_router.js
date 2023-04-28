@@ -5,7 +5,7 @@ const authMiddleware = require("../middleware/AuthToken");
 
 
 router.post("/getallroles",authMiddleware.verifyJWT, RolesController.get_all_roles);
-
+router.delete('/deleterole', authMiddleware.verifyJWT, RolesController.deleteRole)
 
 
 module.exports = router;

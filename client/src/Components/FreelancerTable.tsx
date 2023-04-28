@@ -12,12 +12,15 @@ import { Freelancer } from "../Interfaces/Freelancer";
 import SERVER_URL from "../Constants/server_url";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
 	freelancers: Freelancer[];
 }
 
 const FreelancerTable = ({ freelancers }: Props) => {
+
+	const Navigate = useNavigate()
 	const [show, setShow] = useState(false);
 	const [freelancerchosen, setfreelancerchosen] = useState<Freelancer>();
 	const handleClose = () => setShow(false);
@@ -111,7 +114,11 @@ const FreelancerTable = ({ freelancers }: Props) => {
 							<td>{freelancer.age}</td>
 							<td>{freelancer.email}</td>
 							<td>
-								<button className="btn btn-primary">Edit</button>
+								<button className="btn btn-primary" onClick={() => {
+									Navigate("/admin/editfreelancer", {
+										state: {...freelancer},
+									});
+								}}>Edit</button>
 							</td>
 							<td>
 								<button

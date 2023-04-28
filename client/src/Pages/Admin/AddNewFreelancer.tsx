@@ -88,7 +88,7 @@ export default function AddNewFreelancer(): JSX.Element {
 				localStorage.getItem("username"),
 			).replaceAll('"', "");
 
-			const response = await fetch(`${SERVER_URL}/freelancers/register`, {
+			const response = await fetch(`${SERVER_URL}/freelancers/update`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -276,7 +276,7 @@ export default function AddNewFreelancer(): JSX.Element {
 
 					<div className="form-outline mb-4">
 						<label className="text-white form-label" htmlFor="form6Example6">
-							Roles (Tick the ones that apply)
+							Roles (Tick the ones that apply) :
 						</label>
 
 						<RolesCheckboxList

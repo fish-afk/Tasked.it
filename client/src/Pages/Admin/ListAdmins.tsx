@@ -44,7 +44,7 @@ export default function ListFreelancers() {
 			<Navbar priv="admin" />
 			<div className="container">
 				<div className="title text-center p-3">
-					<h1>Admin list</h1>
+					<h1 className="fw-light">Admin list</h1>
 				</div>
 
 				<div className="d-flex justify-content-end pb-4">

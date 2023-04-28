@@ -1,5 +1,4 @@
 export interface EditAdmin{
-	username: string;
 	fullname: string;
 	email: string;
 	age: string;

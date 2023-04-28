@@ -97,7 +97,7 @@ export default function ListMessages() {
 					</button>
 				</div>
 
-				<div id="recieved">
+				<div id="recieved" className="container-fluid">
 					<div className="d-flex justify-content-center pb-5">
 						<h2>Received messages</h2>
 					</div>
@@ -131,7 +131,7 @@ export default function ListMessages() {
 					)}
 				</div>
 
-				<div id="sent">
+				<div id="sent" className="container-fluid">
 					<div className="d-flex justify-content-center pb-5">
 						<h2>Sent messages</h2>
 					</div>
