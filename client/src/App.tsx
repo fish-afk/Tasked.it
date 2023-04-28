@@ -22,6 +22,7 @@ import EditFreelancer from "./Pages/Admin/EditFreelancer";
 import EditAdminProfile from "./Pages/Admin/EditProfile";
 import ChangePassword from "./Pages/Admin/ChangePassword";
 import EditRole from "./Pages/Admin/EditRole";
+import AddNewRole from "./Pages/Admin/AddNewRole";
 
 import Index from "./Pages";
 import AdminLogin from "./Pages/auth/AdminLogin";
@@ -169,6 +170,15 @@ function App() {
 						element={
 							<ProtectedRoute>
 								<EditRole />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
+						path="/admin/newrole"
+						element={
+							<ProtectedRoute>
+								<AddNewRole />
 							</ProtectedRoute>
 						}
 					/>

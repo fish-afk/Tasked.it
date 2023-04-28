@@ -3,11 +3,8 @@ import Navbar from "../../Components/Navbar";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
 import { Role } from "../../Interfaces/Roles";
-import { useLocation } from "react-router-dom";
 
-export default function EditRole(): JSX.Element {
-
-    const locationHook = useLocation();
+export default function AddNewRole(): JSX.Element {
 	const [formValues, setFormValues] = useState<Role>({
 		id: 0,
 		name: "",
@@ -28,25 +25,24 @@ export default function EditRole(): JSX.Element {
 		).replaceAll('"', "");
 
 		try {
-			const response = await fetch(`${SERVER_URL}/roles/editrole`, {
-				method: "PATCH",
+			const response = await fetch(`${SERVER_URL}/roles/newrole`, {
+				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 					"taskedit-accesstoken": token,
 					username: username_,
 					isadmin: "true",
 				},
-                body: JSON.stringify({
-                    id: locationHook.state.id,
+				body: JSON.stringify({
 					name,
-					description
+					description,
 				}),
 			});
 
 			const data = await response.json();
 			if (data.status == "SUCCESS") {
 				Swal.fire({
-					title: "Updated role successfully",
+					title: "Added New Role successfully",
 					timer: 3000,
 					icon: "success",
 				}).then(() => {
@@ -71,7 +67,7 @@ export default function EditRole(): JSX.Element {
 			<Navbar priv="admin" />
 			<div className="container">
 				<div className="d-flex justify-content-center p-4">
-					<h1>Edit role details</h1>
+					<h1>Add new role to the system</h1>
 				</div>
 
 				<form className="bg-dark p-5 rounded-3" onSubmit={handleSubmit}>
@@ -81,7 +77,6 @@ export default function EditRole(): JSX.Element {
 						</label>
 						<input
 							required
-							placeholder={locationHook.state.name}
 							type="text"
 							minLength={4}
 							id="form6Example5"
@@ -102,7 +97,6 @@ export default function EditRole(): JSX.Element {
 						</label>
 						<input
 							required
-							placeholder={locationHook.state.description}
 							type="text"
 							minLength={8}
 							id="form6Example5"

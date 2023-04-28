@@ -95,8 +95,43 @@ async function editrole(req, res) {
 	}
 }
 
+async function addrole(req, res) { 
+
+    const { name, description } = req.body;
+
+	const role = {  name, description };
+
+    if (req.decoded.privs !== "Admin") {
+        return res.send({
+            status: "FAILURE",
+            message: "Insufficient privileges",
+        });
+    } else { 
+
+        const query = "INSERT INTO Roles SET ?";
+
+				Model.connection.query(query, [role], (err, result) => {
+					if (err) {
+						console.log(err);
+						res
+							.status(500)
+							.send({ status: "FAILURE", message: "Unknown error" });
+					} else {
+						return res.send({
+							status: "SUCCESS",
+							message: "Added role successfully",
+						});
+					}
+				});
+    }
+
+}
+
+
+
 module.exports = {
 	get_all_roles,
     deleteRole,
-    editrole
+    editrole,
+    addrole
 };

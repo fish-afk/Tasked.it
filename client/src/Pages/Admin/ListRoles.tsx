@@ -137,7 +137,9 @@ export default function ListRoles() {
 				</div>
 
 				<div className="d-flex justify-content-center pt-4">
-					<button className="btn btn-primary fw-bold">+ Add New Role</button>
+          <button className="btn btn-primary fw-bold" onClick={() => {
+            Navigate("/admin/newrole")
+          }}>+ Add New Role</button>
 				</div>
 			</div>
 		</div>
