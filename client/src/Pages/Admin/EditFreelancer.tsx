@@ -130,6 +130,7 @@ export default function EditFreelancer(): JSX.Element {
 								</label>
 								<input
 									required
+									placeholder={locationHook.state.fullname}
 									type="text"
 									id="form6Example2"
 									className="form-control"
@@ -150,6 +151,7 @@ export default function EditFreelancer(): JSX.Element {
 							Email
 						</label>
 						<input
+							placeholder={locationHook.state.email}
 							required
 							type="email"
 							id="form6Example5"
@@ -169,6 +171,7 @@ export default function EditFreelancer(): JSX.Element {
 							Age
 						</label>
 						<input
+							placeholder={locationHook.state.age}
 							required
 							type="number"
 							id="form6Example5"

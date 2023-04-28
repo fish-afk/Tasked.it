@@ -23,7 +23,7 @@ const AdminTable = ({ admins }: Props) => {
 	};
 
 	return (
-		<div>
+		<div className="container-fluid">
 			<table className="table table-hover table-dark p-5">
 				<thead className="thead-dark">
 					<tr>

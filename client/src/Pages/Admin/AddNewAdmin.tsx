@@ -263,7 +263,8 @@ export default function AddNewAdmin(): JSX.Element {
 
 					<div className="form-outline">
 						<label className="text-warning form-label" htmlFor="form6Example1">
-							Admin Key (Secret Admin Key That You Have)
+							Admin Key{" "}
+							<em>(Secret Admin Key That You Have For Adding New Admins)</em>
 						</label>
 						<input
 							required
