@@ -20,6 +20,6 @@ router.get(
 router.delete("/:username", adminController.deleteAdmin);
 router.post("/confirmjwt", authMiddleware.confirmJWT);
 router.post("/getnumbers", authMiddleware.verifyJWT, adminController.get_numbers);
-router.post("/gettasksduetoday",authMiddleware.verifyJWT, adminController.get_total_tasks_due_today);
+
 
 module.exports = router;

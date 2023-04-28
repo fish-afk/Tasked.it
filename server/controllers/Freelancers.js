@@ -166,7 +166,7 @@ function registerFreelancer(req, res) {
 
 async function updateFreelancer(req, res) {
 	const { username, email, fullname, roles, age } = req.body;
-	const Freelancer = { password, email, fullname, age };
+	const Freelancer = {email, fullname, age };
 
 	// check if username exists
 	Model.connection.query(

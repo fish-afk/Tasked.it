@@ -9,7 +9,6 @@ export default function AddNewAdmin(): JSX.Element {
 		username: "",
 		fullname: "",
 		email: "",
-		age: "",
 		employee_title: "",
 		password: "",
 		confirm_password: "",
@@ -170,26 +169,7 @@ export default function AddNewAdmin(): JSX.Element {
 						/>
 					</div>
 
-					<div className="form-outline mb-4">
-						<label className="text-white form-label" htmlFor="form6Example5">
-							Age
-						</label>
-						<input
-							min={10}
-							max={150}
-							required
-							type="number"
-							id="form6Example5"
-							className="form-control"
-							value={formValues.age}
-							onChange={(e) =>
-								setFormValues({
-									...formValues,
-									age: e.target.value,
-								})
-							}
-						/>
-					</div>
+					
 
 					<div className="form-outline mb-4">
 						<label className="text-white form-label" htmlFor="form6Example1">

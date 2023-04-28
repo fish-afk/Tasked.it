@@ -1,46 +1,52 @@
 const Model = require("../models/Mysql_conn");
 const authMiddleware = require("../middleware/AuthToken");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 const SALT_ROUNDS = 10;
 
 // async function to login a user
 async function login(req, res) {
-    const { username, password } = req.body;
+	const { username, password } = req.body;
 
-    console.log(username)
+	console.log(username);
 
 	Model.connection.query(
 		"SELECT * FROM Admins WHERE username = ?",
 		[username],
 		(err, results) => {
-			if (err) res.send({status: 'FAILURE', message: "Unknown error"});
+			if (err) res.send({ status: "FAILURE", message: "Unknown error" });
 
 			// check if user with the given username exists in the database
-            if (results?.length === 0) {
-                return res.send({ status: 'FAILURE', message: "Invalid username or password" });
-            } else {
-                // verify hashed password
-                const hashedPassword = results[0]?.password;
-                bcrypt.compare(password, hashedPassword, (err, match) => {
-                    if (err) res.send({ status: 'FAILURE', message: "Unknown error" });
-                    if (!match) {
-                        return res.send({
-                            status: "FAILURE",
-                            message: "Invalid username or password",
-                        });
-                    }
-                    
-                    // create a refresh token and an access token
-                    const refreshToken = authMiddleware.generateRefreshToken(username, "Admin");
-                    const accessToken = authMiddleware.createJWTtoken(username, "Admin");
+			if (results?.length === 0) {
+				return res.send({
+					status: "FAILURE",
+					message: "Invalid username or password",
+				});
+			} else {
+				// verify hashed password
+				const hashedPassword = results[0]?.password;
+				bcrypt.compare(password, hashedPassword, (err, match) => {
+					if (err) res.send({ status: "FAILURE", message: "Unknown error" });
+					if (!match) {
+						return res.send({
+							status: "FAILURE",
+							message: "Invalid username or password",
+						});
+					}
 
-                    return res.send({
-                        "refreshToken": refreshToken,
-                        "accessToken": accessToken
-                    })
-                });
-            }
+					// create a refresh token and an access token
+					const refreshToken = authMiddleware.generateRefreshToken(
+						username,
+						"Admin",
+					);
+					const accessToken = authMiddleware.createJWTtoken(username, "Admin");
+
+					return res.send({
+						refreshToken: refreshToken,
+						accessToken: accessToken,
+					});
+				});
+			}
 		},
 	);
 }
@@ -55,20 +61,31 @@ const refresh = async (req, res) => {
 	await authMiddleware.verifyRefreshToken(refreshToken, username, res);
 };
 
-
 async function registerAdmin(req, res) {
+	const {
+		username,
+		password,
+		email,
+		fullname,
+		employee_title = "staff",
+		admin_key,
+	} = req.body;
 
-    const { username, password, email, fullname, employee_title = "staff", admin_key } = req.body;
-    
-    if (admin_key !== process.env.ADMIN_KEY) {
-        return res.send({status: 'FAILURE', message: 'Admin key incorrect'})
-    }
+	if (admin_key !== process.env.ADMIN_KEY) {
+		return res.send({ status: "FAILURE", message: "Admin key incorrect" });
+	}
 
 	// hash the password
 	bcrypt.hash(password, SALT_ROUNDS, (err, hashedPassword) => {
-		if (err) console.log(err)
+		if (err) console.log(err);
 
-		const admin = { username, password: hashedPassword, email, fullname, employee_title };
+		const admin = {
+			username,
+			password: hashedPassword,
+			email,
+			fullname,
+			employee_title,
+		};
 
 		// check if username exists
 		Model.connection.query(
@@ -89,7 +106,7 @@ async function registerAdmin(req, res) {
 						admin,
 						(err, result) => {
 							if (err) {
-								console.log(err)
+								console.log(err);
 								return res.send({
 									status: "FAILURE",
 									message: "Unknown error",
@@ -100,7 +117,6 @@ async function registerAdmin(req, res) {
 									message: `Admin with username ${username} added to database.`,
 								});
 							}
-							
 						},
 					);
 				}
@@ -114,11 +130,14 @@ async function updateAdmin(req, res) {
 		return res.send({ status: "FAILURE", message: "Insufficient privileges" });
 	}
 
-	const { username, email, fullname, age, employee_title } = req.body;
-	const admin = { email, fullname, age, employee_title };
+	const { username, email, fullname, employee_title } = req.body;
+	const admin = { email, fullname, employee_title };
 
 	if (req.decoded.username != username) {
-		return res.send({ status: "FAILURE", message: "username mismatch. You cant update another admins profile." });
+		return res.send({
+			status: "FAILURE",
+			message: "username mismatch. You cant update another admins profile.",
+		});
 	}
 
 	// check if username exists
@@ -126,10 +145,14 @@ async function updateAdmin(req, res) {
 		"SELECT * FROM Admins WHERE username = ?",
 		username,
 		(err, result) => {
-			if (err)
-				res.status(500).send({ status: "FAILURE", message: "Unknown error" });
+			if (err) {
+				console.log(err);
+				return res
+					.status(500)
+					.send({ status: "FAILURE", message: "Unknown error" });
+			}
 			if (result.length === 0) {
-				res.status(404).send({
+				return res.status(404).send({
 					status: "FAILURE",
 					message: `Admin with username ${username} not found.`,
 				});
@@ -139,22 +162,24 @@ async function updateAdmin(req, res) {
 					"UPDATE Admins SET ? WHERE username = ?",
 					[admin, username],
 					(err, result) => {
-						if (err)
-							res.status(500).send({
+						if (err) {
+							console.log(err);
+							return res.status(500).send({
 								status: "FAILURE",
 								message: "Unknown error",
 							});
-						res.send({
-							status: "SUCCESS",
-							message: `Admin with username ${username} updated.`,
-						});
+						} else {
+							return res.send({
+								status: "SUCCESS",
+								message: `Admin with username ${username} updated.`,
+							});
+						}
 					},
 				);
 			}
 		},
 	);
 }
-
 
 async function getAllAdmins(req, res) {
 	if (req.decoded.privs != "Admin") {
@@ -194,7 +219,6 @@ async function getAdminByUsername(req, res) {
 	);
 }
 
-
 async function deleteAdmin(req, res) {
 	const username = req.params.username;
 
@@ -217,7 +241,6 @@ async function deleteAdmin(req, res) {
 		},
 	);
 }
-
 
 async function get_numbers(req, res) {
 	if (req.decoded.privs != "Admin") {
@@ -261,17 +284,13 @@ async function get_numbers(req, res) {
 	}
 }
 
-
-
-
-
 module.exports = {
 	registerAdmin,
 	getAllAdmins,
 	getAdminByUsername,
 	updateAdmin,
-    deleteAdmin,
-    login,
+	deleteAdmin,
+	login,
 	refresh,
 	get_numbers,
 };

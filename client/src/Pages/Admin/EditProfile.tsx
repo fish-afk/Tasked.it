@@ -6,17 +6,14 @@ import { EditAdmin } from "../../Interfaces/EditAdminProfile";
 
 export default function EditAdminProfile(): JSX.Element {
 	const [formValues, setFormValues] = useState<EditAdmin>({
-		
 		fullname: "",
 		email: "",
-		age: "",
+	
 		employee_title: "",
 	});
 
 	useEffect(() => {
-		const func = async () => {
-			
-		};
+		const func = async () => {};
 
 		func();
 	}, []);
@@ -24,15 +21,7 @@ export default function EditAdminProfile(): JSX.Element {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		const {
-
-			email,
-			age,
-			fullname,
-			employee_title = "staff",
-		} = formValues;
-
-		
+		const { email, fullname, employee_title = "staff" } = formValues;
 
 		const token = JSON.stringify(
 			localStorage.getItem("taskedit-accesstoken"),
@@ -53,17 +42,16 @@ export default function EditAdminProfile(): JSX.Element {
 				},
 				body: JSON.stringify({
 					username: username_,
-					age,
 					email,
 					fullname,
-					employee_title
+					employee_title,
 				}),
 			});
 
 			const data = await response.json();
 			if (data.status == "SUCCESS") {
 				Swal.fire({
-					title: "Registered successfully",
+					title: "Updated successfully",
 					timer: 3000,
 					icon: "success",
 				}).then(() => {
@@ -90,10 +78,9 @@ export default function EditAdminProfile(): JSX.Element {
 				<div className="d-flex justify-content-center p-4">
 					<h1>Update your details</h1>
 				</div>
-				
+
 				<form className="bg-dark p-5 rounded-3" onSubmit={handleSubmit}>
 					<div className="row mb-4">
-						
 						<div className="col">
 							<div className="form-outline">
 								<label
@@ -138,24 +125,7 @@ export default function EditAdminProfile(): JSX.Element {
 						/>
 					</div>
 
-					<div className="form-outline mb-4">
-						<label className="text-white form-label" htmlFor="form6Example5">
-							Age
-						</label>
-						<input
-							required
-							type="number"
-							id="form6Example5"
-							className="form-control"
-							value={formValues.age}
-							onChange={(e) =>
-								setFormValues({
-									...formValues,
-									age: e.target.value,
-								})
-							}
-						/>
-					</div>
+					
 
 					<div className="form-outline mb-4">
 						<label className="text-white form-label" htmlFor="form6Example1">
