@@ -77,7 +77,7 @@ async function send_message(req, res) {
 						return res.send({ status: "FAILURE", message: "Try later" });
 					}
 				} else {
-					console.log(err)
+					console.log(err);
 					return res.send({ status: "FAILURE", message: "No such user found" });
 				}
 			});
@@ -88,24 +88,21 @@ async function send_message(req, res) {
 }
 
 function get_my_messages(req, res) {
-
-	const username = req.decoded['username'];
+	const username = req.decoded["username"];
 
 	MongoDB.Messages.find(
 		{
-			$or: [{ from: username }, { to: username }]
-		
+			$or: [{ from: username }, { to: username }],
 		},
 		(err, messages) => {
 			if (err) {
-				console.log(err)
-				return res.send({status: 'FAILURE', message: 'Unknown error'})
+				console.log(err);
+				return res.send({ status: "FAILURE", message: "Unknown error" });
 			} else {
 				return res.send({ status: "SUCCESS", data: messages });
 			}
 		},
 	);
-
 }
 
 module.exports = {

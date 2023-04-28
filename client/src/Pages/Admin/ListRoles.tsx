@@ -3,8 +3,10 @@ import Navbar from "../../Components/Navbar";
 import { Role } from "../../Interfaces/Roles";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export default function ListRoles() {
+  const Navigate = useNavigate()
 	const [roles, setroles] = useState<Role[]>([]);
 
 	const delete_role = (Role_id: number) => {
@@ -103,7 +105,7 @@ export default function ListRoles() {
 			<Navbar priv="admin" />
 			<div className="container">
 				<div className="title text-center p-3">
-					<h1 className="fw-light">List Roles</h1>
+					<h1 className="fw-light">Current Freelancer roles in the system</h1>
 				</div>
 
 				<div className="container-fluid mt-3">
@@ -114,7 +116,11 @@ export default function ListRoles() {
 									<div className="card-body">
 										<h5 className="card-title">{role.name}</h5>
 										<p className="card-text">{role.description}</p>
-										<button className="btn btn-warning me-2">Edit</button>
+                    <button className="btn btn-warning me-2" onClick={() => {
+                      Navigate('/admin/editrole',  {
+                        state: {...role},
+                      });
+                    }}>Edit</button>
 										<button
 											className="btn btn-danger"
 											onClick={() => {

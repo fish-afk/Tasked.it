@@ -43,8 +43,8 @@ export default function ChangePassword(): JSX.Element {
 					isadmin: "true",
 				},
 				body: JSON.stringify({
-					current_password,
-					new_password,
+					oldPassword: current_password,
+					newPassword: new_password
 				}),
 			});
 
@@ -87,7 +87,7 @@ export default function ChangePassword(): JSX.Element {
 						<input
 							required
 							type="password"
-							minLength={8}
+					
 							id="form6Example5"
 							className="form-control"
 							value={formValues.current_password}

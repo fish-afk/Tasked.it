@@ -125,6 +125,59 @@ async function registerAdmin(req, res) {
 	});
 }
 
+async function change_password(req, res) {
+	const username = req.decoded["username"];
+
+	if (username == undefined) {
+		return res.send({ status: "FAILURE", message: "Missing details" });
+	} else {
+		const { oldPassword, newPassword } = req.body;
+
+		// get the hashed password from the database
+		Model.connection.query(
+			"SELECT * FROM Admins WHERE username = ?",
+			[username],
+			async (err, results) => {
+				if (err) {
+					return res.send({ status: "FAILURE", message: "Unknown error" });
+				}
+
+				const hashedPassword = results[0]?.password;
+
+				// verify the old password
+				const match = await bcrypt.compare(oldPassword, hashedPassword);
+				if (!match) {
+					return res.send({
+						status: "FAILURE",
+						message: "Invalid old password",
+					});
+				}
+
+				// hash the new password
+				const newHashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+				// update the password in the database
+				Model.connection.query(
+					"UPDATE Admins SET password = ? WHERE username = ?",
+					[newHashedPassword, username],
+					(err, result) => {
+						if (err) {
+							console.log(err);
+							return res.send({ status: "FAILURE", message: "Unknown error" });
+						} else {
+							return res.send({
+								status: "SUCCESS",
+								message: "Password updated successfully",
+							});
+						}
+					},
+				);
+			},
+		);
+	}
+}
+
+
 async function updateAdmin(req, res) {
 	if (req.decoded.privs != "Admin") {
 		return res.send({ status: "FAILURE", message: "Insufficient privileges" });
@@ -293,4 +346,5 @@ module.exports = {
 	login,
 	refresh,
 	get_numbers,
+	change_password
 };
