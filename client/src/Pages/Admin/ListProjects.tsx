@@ -105,17 +105,27 @@ export default function ListProjects() {
 			<Navbar priv="admin" />
 			<div className="container">
 				<div className="title text-center p-3">
-					<h1 className="fw-light">Current projects in the system</h1>
+					<h1 className="fw-light">List of Projects</h1>
 				</div>
 
 				<div className="container-fluid mt-3">
 					<div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
 						{projects.map((Project) => (
-							<div className="col" key={Project.id}>
-								<div className="card h-100">
+							<div className="col p-2" key={Project.id}>
+								<div className="card h-100 border border-info rounded-2">
 									<div className="card-body">
-										<h5 className="card-title">{Project.name}</h5>
-										<p className="card-text">{Project.duration_in_days}</p>
+										<h5 className="card-title">Name: {Project.name}</h5>
+										<p className="card-text">
+											Duration given in days: {Project.duration_in_days}
+										</p>
+										<p className="card-text">
+											Funding: ${Project.total_funding}
+										</p>
+										<p className="card-text">Client id: {Project.client}</p>
+										<p className="card-text">Project Admin: {Project.Admin}</p>
+										<p className="card-text">
+											Completed: {Project.completed == 0 ? "false" : "true"}
+										</p>
 										<button
 											className="btn btn-warning me-2"
 											onClick={() => {
@@ -127,13 +137,14 @@ export default function ListProjects() {
 											Edit
 										</button>
 										<button
-											className="btn btn-danger"
+											className="btn btn-danger me-2"
 											onClick={() => {
 												delete_role(Project.id);
 											}}
 										>
 											Remove
 										</button>
+										<button className="btn btn-info">Show tasks</button>
 									</div>
 								</div>
 							</div>

@@ -32,11 +32,12 @@ export default function EditFreelancer(): JSX.Element {
 
 				const response = await fetch(`${SERVER_URL}/roles/getallroles`, {
 					headers: {
+						"Content-Type": "application/json",
 						"taskedit-accesstoken": token,
 						username: username,
 						isadmin: "true",
 					},
-					method: "POST",
+					method: "GET",
 				});
 
 				const data = await response.json();
