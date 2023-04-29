@@ -11,11 +11,11 @@ const ProtectedRoute = ({ children }: any) => {
 			const username = localStorage.getItem("username");
 			const priv = localStorage.getItem("priv");
 
-			const response = await fetch(`http://localhost:4455/${priv}/confirmjwt`, {
+			const response = await fetch(`http://localhost:4455/${priv}s/confirmjwt`, {
 				body: JSON.stringify({
 					"taskedit-accesstoken": accessToken,
 					username: username,
-					isadmin: priv === "admins" ? "true" : "false",
+					isadmin: priv === "admin" ? "true" : "false",
 				}),
 				method: "POST",
 				headers: {

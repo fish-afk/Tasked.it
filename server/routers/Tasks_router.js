@@ -5,6 +5,6 @@ const authMiddleware = require("../middleware/AuthToken");
 
 
 router.get("/gettasksduetoday", authMiddleware.verifyJWT, tasksController.get_total_tasks_due_today);
-
+router.get("/gettasksforproject", authMiddleware.verifyJWT, tasksController.get_tasks_for_project);
 
 module.exports = router;

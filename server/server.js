@@ -16,13 +16,14 @@ const freelancerRouter = require("./routers/Freelancer_router");
 const MessagesRouter = require("./routers/Messages_router");
 const RolesRouter = require("./routers/Roles_router");
 const TasksRouter = require("./routers/Tasks_router");
-
+const ProjectsRouter = require("./routers/Projects_router");
 
 app.use("/admins", adminRouter);
 app.use("/freelancers", freelancerRouter);
 app.use("/messages", MessagesRouter);
 app.use("/roles", RolesRouter);
 app.use("/tasks", TasksRouter);
+app.use('/projects', ProjectsRouter);
 
 app.get('/test', (req, res) => {
     return res.send("server running");

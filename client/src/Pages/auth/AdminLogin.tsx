@@ -22,7 +22,7 @@ export default function AdminLogin() {
 				localStorage.setItem("taskedit-accesstoken", data.accessToken);
 				localStorage.setItem("taskedit-refreshtoken", data.refreshToken);
 				localStorage.setItem("username", username);
-				localStorage.setItem("priv", "admins");
+				localStorage.setItem("priv", "admin");
 				Navigate("/admin/home");
 			} else {
 				Swal.fire({

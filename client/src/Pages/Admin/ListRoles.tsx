@@ -86,7 +86,7 @@ export default function ListRoles() {
 					username: username,
 					isadmin: "true",
 				},
-				method: "POST",
+				method: "GET",
 			});
 
 			const data = await response.json();

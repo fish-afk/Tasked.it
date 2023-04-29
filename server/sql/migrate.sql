@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `Projects`(
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
     `duration_in_days` BIGINT UNSIGNED NOT NULL,
+    `completed` TINYINT(1) NOT NULL DEFAULT 0,
     `client` BIGINT UNSIGNED,
     `Admin` VARCHAR(255),
     `total_funding` DOUBLE NOT NULL
