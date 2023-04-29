@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import React from "react";
-
 import "./Styles/App.css";
 
 import AdminHome from "./Pages/Admin/AdminHome";
@@ -23,6 +22,8 @@ import EditAdminProfile from "./Pages/Admin/EditProfile";
 import ChangePassword from "./Pages/Admin/ChangePassword";
 import EditRole from "./Pages/Admin/EditRole";
 import AddNewRole from "./Pages/Admin/AddNewRole";
+import EditProject from "./Pages/Admin/EditProject";
+import AddNewProject from "./Pages/Admin/AddNewProject";
 
 import Index from "./Pages";
 import AdminLogin from "./Pages/auth/AdminLogin";
@@ -54,7 +55,7 @@ function App() {
 
 			if (data.jwt) {
 				localStorage.setItem("taskedit-accesstoken", data.jwt);
-				console.log('Refreshed !');
+				console.log("Refreshed !");
 			} else {
 				Nav(`/${priv}/logout`);
 			}
@@ -166,6 +167,15 @@ function App() {
 					/>
 
 					<Route
+						path="/admin/editproject"
+						element={
+							<ProtectedRoute>
+								<EditProject />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
 						path="/admin/editrole"
 						element={
 							<ProtectedRoute>
@@ -179,6 +189,15 @@ function App() {
 						element={
 							<ProtectedRoute>
 								<AddNewRole />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
+						path="/admin/newproject"
+						element={
+							<ProtectedRoute>
+								<AddNewProject />
 							</ProtectedRoute>
 						}
 					/>

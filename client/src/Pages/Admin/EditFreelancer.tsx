@@ -2,63 +2,57 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
-import { Role } from "../../Interfaces/Roles";
+import { Role } from "../../Interfaces/Role";
 import { EditFreelancerAdmin } from "../../Interfaces/EditFreelancerAdmin";
 import RolesCheckboxList from "../../Components/RolesCheckBoxList";
 import { useLocation } from "react-router-dom";
 
 export default function EditFreelancer(): JSX.Element {
+	const locationHook = useLocation();
+	const [chosenRoles, setchosenRoles] = useState<Role[]>([]);
+	const [fetchedroles, setfetchedroles] = useState([]);
 
-  const locationHook = useLocation();
-  const [chosenRoles, setchosenRoles] = useState<Role[]>([]);
-  const [fetchedroles, setfetchedroles] = useState([]);
-  
-  const [formValues, setFormValues] = useState<EditFreelancerAdmin>({
-    
+	const [formValues, setFormValues] = useState<EditFreelancerAdmin>({
 		fullname: "",
 		email: "",
-		age: ""
+		age: "",
 	});
 
 	useEffect(() => {
-      const func = async () => {
-				const token = JSON.stringify(
-					localStorage.getItem("taskedit-accesstoken"),
-				).replaceAll('"', "");
+		const func = async () => {
+			const token = JSON.stringify(
+				localStorage.getItem("taskedit-accesstoken"),
+			).replaceAll('"', "");
 
-				const username = JSON.stringify(
-					localStorage.getItem("username"),
-				).replaceAll('"', "");
+			const username = JSON.stringify(
+				localStorage.getItem("username"),
+			).replaceAll('"', "");
 
-				const response = await fetch(`${SERVER_URL}/roles/getallroles`, {
-					headers: {
-						"Content-Type": "application/json",
-						"taskedit-accesstoken": token,
-						username: username,
-						isadmin: "true",
-					},
-					method: "GET",
-				});
+			const response = await fetch(`${SERVER_URL}/roles/getallroles`, {
+				headers: {
+					"Content-Type": "application/json",
+					"taskedit-accesstoken": token,
+					username: username,
+					isadmin: "true",
+				},
+				method: "GET",
+			});
 
-				const data = await response.json();
+			const data = await response.json();
 
-				console.log(data);
-				if (data.status == "SUCCESS") {
-					setfetchedroles(data.data);
-				}
-    };
+			console.log(data);
+			if (data.status == "SUCCESS") {
+				setfetchedroles(data.data);
+			}
+		};
 
-    func();
+		func();
 	}, []);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-    const {
-			email,
-			age,
-			fullname
-		} = formValues;
+		const { email, age, fullname } = formValues;
 
 		const token = JSON.stringify(
 			localStorage.getItem("taskedit-accesstoken"),

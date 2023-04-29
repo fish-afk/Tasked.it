@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
-import { message } from "../../Interfaces/Messages";
+import { message } from "../../Interfaces/Message";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
 import { TbInboxOff } from "react-icons/tb";

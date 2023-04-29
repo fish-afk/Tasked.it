@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
-import { Role } from "../../Interfaces/Roles";
+import { Role } from "../../Interfaces/Role";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 export default function ListRoles() {
-  const Navigate = useNavigate()
+	const Navigate = useNavigate();
 	const [roles, setroles] = useState<Role[]>([]);
 
 	const delete_role = (Role_id: number) => {
@@ -112,15 +112,20 @@ export default function ListRoles() {
 					<div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
 						{roles.map((role) => (
 							<div className="col" key={role.id}>
-								<div className="card h-100">
+								<div className="card h-100 bg-black text-white p-2">
 									<div className="card-body">
 										<h5 className="card-title">{role.name}</h5>
 										<p className="card-text">{role.description}</p>
-                    <button className="btn btn-warning me-2" onClick={() => {
-                      Navigate('/admin/editrole',  {
-                        state: {...role},
-                      });
-                    }}>Edit</button>
+										<button
+											className="btn btn-warning me-2"
+											onClick={() => {
+												Navigate("/admin/editrole", {
+													state: { ...role },
+												});
+											}}
+										>
+											Edit
+										</button>
 										<button
 											className="btn btn-danger"
 											onClick={() => {
@@ -137,9 +142,14 @@ export default function ListRoles() {
 				</div>
 
 				<div className="d-flex justify-content-center pt-4">
-          <button className="btn btn-primary fw-bold" onClick={() => {
-            Navigate("/admin/newrole")
-          }}>+ Add New Role</button>
+					<button
+						className="btn btn-primary fw-bold"
+						onClick={() => {
+							Navigate("/admin/newrole");
+						}}
+					>
+						+ Add New Role
+					</button>
 				</div>
 			</div>
 		</div>

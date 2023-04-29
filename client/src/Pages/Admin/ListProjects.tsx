@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
-import { Project } from "../../Interfaces/Projects";
+import { Project } from "../../Interfaces/Project";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -112,7 +112,7 @@ export default function ListProjects() {
 					<div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
 						{projects.map((Project) => (
 							<div className="col p-2" key={Project.id}>
-								<div className="card h-100 border border-info rounded-2">
+								<div className="card h-100 border border-info rounded-2 bg-dark text-white">
 									<div className="card-body">
 										<h5 className="card-title">Name: {Project.name}</h5>
 										<p className="card-text">
@@ -156,7 +156,7 @@ export default function ListProjects() {
 					<button
 						className="btn btn-primary fw-bold"
 						onClick={() => {
-							Navigate("/admin/newrole");
+							Navigate("/admin/newproject");
 						}}
 					>
 						+ Create New Project

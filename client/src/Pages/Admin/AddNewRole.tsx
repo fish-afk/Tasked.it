@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
-import { Role } from "../../Interfaces/Roles";
+import { Role } from "../../Interfaces/Role";
 
 export default function AddNewRole(): JSX.Element {
 	const [formValues, setFormValues] = useState<Role>({

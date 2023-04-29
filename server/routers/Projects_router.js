@@ -6,6 +6,7 @@ const authMiddleware = require("../middleware/AuthToken");
 
 router.get('/getallprojects', authMiddleware.verifyJWT, ProjectsController.get_all_projects);
 router.patch('/editproject', authMiddleware.verifyJWT, ProjectsController.edit_project);
-router.post("/newproject", authMiddleware.verifyJWT, ProjectsController.new_project)
+router.post("/newproject", authMiddleware.verifyJWT, ProjectsController.new_project);
+router.delete("/deleteproject", authMiddleware.verifyJWT, ProjectsController.delete_project);
 
 module.exports = router;

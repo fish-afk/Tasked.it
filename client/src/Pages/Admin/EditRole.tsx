@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
-import { Role } from "../../Interfaces/Roles";
+import { Role } from "../../Interfaces/Role";
 import { useLocation } from "react-router-dom";
 
 export default function EditRole(): JSX.Element {
-
-    const locationHook = useLocation();
+	const locationHook = useLocation();
 	const [formValues, setFormValues] = useState<Role>({
 		id: 0,
 		name: "",
@@ -36,10 +35,10 @@ export default function EditRole(): JSX.Element {
 					username: username_,
 					isadmin: "true",
 				},
-                body: JSON.stringify({
-                    id: locationHook.state.id,
+				body: JSON.stringify({
+					id: locationHook.state.id,
 					name,
-					description
+					description,
 				}),
 			});
 

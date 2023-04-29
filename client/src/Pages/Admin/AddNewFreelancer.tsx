@@ -3,7 +3,7 @@ import Navbar from "../../Components/Navbar";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
 import { FreelancerNew } from "../../Interfaces/FreelancerNew";
-import { Role } from "../../Interfaces/Roles";
+import { Role } from "../../Interfaces/Role";
 import RolesCheckboxList from "../../Components/RolesCheckBoxList";
 
 export default function AddNewFreelancer(): JSX.Element {

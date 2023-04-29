@@ -26,31 +26,38 @@ const edit_project = async (req, res) => {
 		});
 	}
 
-	const { id, name, duration_in_days, total_funding, client, Admin } = req.body;
+	const { id, name, duration_in_days, total_funding, Admin } = req.body;
 
-	const update = { name, duration_in_days, total_funding, client, Admin };
-
-	if (
-		!id ||
-		!name ||
-		!duration_in_days ||
-		!total_funding ||
-		!client ||
-		!Admin
-	) {
+	if (!id || !name || !duration_in_days || !total_funding || !Admin) {
 		return res.send({
 			status: "FAILURE",
 			message: "Missing details",
 		});
 	} else {
-		const query = "UPDATE Projects SET ? WHERE id = ?";
+		const query = "SELECT * FROM Admins WHERE username = ?";
 
-		Model.connection.query(query, [update, id], (err, results) => {
+		Model.connection.query(query, [Admin], (err, results) => {
 			if (err) {
 				console.log(err);
 				return res.send({ status: "FAILURE", message: "Unknown error" });
+			} else if (results?.length < 1) {
+				return res.send({ status: "FAILURE", message: "Admin does not exist" });
 			} else {
-				return res.send({ status: "SUCCESS", message: "Updated successfully" });
+				const update = { name, duration_in_days, total_funding, Admin };
+
+				const query = "UPDATE Projects SET ? WHERE id = ?";
+
+				Model.connection.query(query, [update, id], (err, results) => {
+					if (err) {
+						console.log(err);
+						return res.send({ status: "FAILURE", message: "Unknown error" });
+					} else {
+						return res.send({
+							status: "SUCCESS",
+							message: "Updated successfully",
+						});
+					}
+				});
 			}
 		});
 	}
@@ -90,8 +97,38 @@ const new_project = (req, res) => {
 	}
 };
 
+const delete_project = (req, res) => {
+	if (req.decoded.privs != "Admin") {
+		return res.send({
+			status: "FAILURE",
+			message: "Insufficient privileges",
+		});
+	} else {
+		const { id } = req.body;
+
+		if (!id) {
+			return res.send({ status: "FAILURE", message: "Missing details" });
+		} else {
+			const query = "DELETE FROM Projects WHERE id = ?";
+
+			Model.connection.query(query, [id], (err, results) => {
+				if (err) {
+					console.log(err);
+					return res.send({ status: "FAILURE", message: "Unknown error" });
+				} else {
+					return res.send({
+						status: "SUCCESS",
+						message: "Deleted project successfully",
+					});
+				}
+			});
+		}
+	}
+};
+
 module.exports = {
 	get_all_projects,
 	edit_project,
 	new_project,
+	delete_project,
 };

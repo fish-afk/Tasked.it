@@ -7,7 +7,7 @@ from the `react-bootstrap` library to display the tooltips. */
 
 import React, { useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { Role } from "../Interfaces/Roles";
+import { Role } from "../Interfaces/Role";
 
 interface Props {
 	Roles: Role[];
