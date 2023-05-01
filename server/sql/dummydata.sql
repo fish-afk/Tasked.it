@@ -52,9 +52,9 @@ INSERT INTO `freelancers` (`username`, `fullname`, `password`, `age`, `email`) V
 
 -- Dumping data for table taskedit.projects: ~3 rows (approximately)
 INSERT INTO `projects` (`id`, `name`, `duration_in_days`, `client`, `Admin`, `total_funding`, `completed`) VALUES
-	(1, 'Project A', 6, 1, 'admin1', 50000, 0),
-	(2, 'Project B', 4, 2, 'admin2', 20000, 0),
-	(3, 'Project C', 8, 3, 'admin3', 75000, 0);
+	(1, 'Project A', 6, 'Client A', 'admin1', 50000, 0),
+	(2, 'Project B', 4, 'Client A', 'admin2', 20000, 0),
+	(3, 'Project C', 8, 'Client B', 'admin3', 75000, 0);
 
 -- Dumping data for table taskedit.roles: ~13 rows (approximately)
 INSERT INTO `roles` (`id`, `name`, `description`) VALUES

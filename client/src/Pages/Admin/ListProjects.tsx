@@ -121,7 +121,7 @@ export default function ListProjects() {
 										<p className="card-text">
 											Funding: ${Project.total_funding}
 										</p>
-										<p className="card-text">Client id: {Project.client}</p>
+										<p className="card-text">Client name: {Project.client}</p>
 										<p className="card-text">Project Admin: {Project.Admin}</p>
 										<p className="card-text">
 											Completed: {Project.completed == 0 ? "false" : "true"}
