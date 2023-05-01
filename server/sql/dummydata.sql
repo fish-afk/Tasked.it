@@ -23,10 +23,10 @@ INSERT INTO `admins` (`username`, `password`, `email`, `fullname`, `employee_tit
 	('slide', '$2b$10$JBnl7X6gSh2cmxJzb6orx.tDjyICxTgQVNT9vmQxQE4tVIsWmaPAi', 'mirzashihab2@gmail.com', 'asdasd', 'asdasd');
 
 -- Dumping data for table taskedit.clients: ~3 rows (approximately)
-INSERT INTO `clients` (`id`, `name`, `description`) VALUES
-	(1, 'Client A', 'A multinational company in the tech industry'),
-	(2, 'Client B', 'A startup in the healthcare industry'),
-	(3, 'Client C', 'A non-profit organization in the education sector');
+INSERT INTO `clients` (`name`, `description`, `email`) VALUES
+	('Client A', 'A multinational company in the tech industry', "client1@example.com"),
+	('Client B', 'A startup in the healthcare industry',"client2@example.com"),
+	('Client C', 'A non-profit organization in the education sector', "client3@example.com");
 
 -- Dumping data for table taskedit.freelancerroles: ~10 rows (approximately)
 INSERT INTO `freelancerroles` (`id`, `role`, `freelancer`) VALUES

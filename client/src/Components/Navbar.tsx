@@ -1,5 +1,15 @@
 import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import {
+	AiFillHome,
+	AiFillProject,
+	AiOutlineKey,
+	AiFillMessage,
+} from "react-icons/ai";
+import { RiAdminLine } from "react-icons/ri"
+import { BsPersonLinesFill } from "react-icons/bs"
+import { GoPerson } from "react-icons/go"
+
 
 type NavProps = {
 	priv: string;
@@ -28,52 +38,46 @@ const Navbar = ({ priv }: NavProps) => {
 				<li className="nav-item">
 					<Link
 						to={`/admin/home`}
-						className="nav-link text-white icon-link-hover"
+						className="nav-link text-white"
 						aria-current="page"
 					>
-						<svg className="bi me-2" width="16" height="16">
-							<use xlinkHref="#home"></use>
-						</svg>
+						<AiFillHome className="bi me-2 mb-1" />
 						Home
 					</Link>
 				</li>
 				<li>
 					<Link to="/admin/listfreelancers" className="nav-link text-white">
-						<svg className="bi me-2" width="16" height="16">
-							<use xlinkHref="#speedometer2"></use>
-						</svg>
+						<BsPersonLinesFill className="bi me-2 mb-1" />
 						Freelancers
 					</Link>
 				</li>
 				<li>
 					<Link to="/admin/listadmins" className="nav-link text-white">
-						<svg className="bi me-2" width="16" height="16">
-							<use xlinkHref="#speedometer2"></use>
-						</svg>
+						<RiAdminLine className="bi me-2 mb-1" />
 						Admins
 					</Link>
 				</li>
 				<li>
+					<Link to="/admin/listclients" className="nav-link text-white">
+						<GoPerson className="bi me-2 mb-1" />
+						Clients
+					</Link>
+				</li>
+				<li>
 					<Link to="/admin/listprojects" className="nav-link text-white">
-						<svg className="bi me-2" width="16" height="16">
-							<use xlinkHref="#table"></use>
-						</svg>
+						<AiFillProject className="bi me-2 mb-1" />
 						Projects
 					</Link>
 				</li>
 				<li>
 					<Link to="/admin/listroles" className="nav-link text-white">
-						<svg className="bi me-2" width="16" height="16">
-							<use xlinkHref="#grid"></use>
-						</svg>
+						<AiOutlineKey className="bi me-2 mb-1" />
 						Roles
 					</Link>
 				</li>
 				<li>
 					<Link to="/admin/listmessages" className="nav-link text-white">
-						<svg className="bi me-2" width="16" height="16">
-							<use xlinkHref="#people-circle"></use>
-						</svg>
+						<AiFillMessage className="bi me-2 mb-1" />
 						Messages
 					</Link>
 				</li>

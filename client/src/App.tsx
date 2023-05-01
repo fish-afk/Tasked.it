@@ -14,11 +14,14 @@ import ListAdmins from "./Pages/Admin/ListAdmins";
 import ListMessages from "./Pages/Admin/ListMessages";
 import ListProjects from "./Pages/Admin/ListProjects";
 import ListRoles from "./Pages/Admin/ListRoles";
+import ListClients from "./Pages/Admin/ListClients";
 
 import AddNewFreelancer from "./Pages/Admin/AddNewFreelancer";
 import AddNewAdmin from "./Pages/Admin/AddNewAdmin";
+import AddNewClient from "./Pages/Admin/AddNewClient";
 import EditFreelancer from "./Pages/Admin/EditFreelancer";
 import EditAdminProfile from "./Pages/Admin/EditProfile";
+import EditClient from "./Pages/Admin/EditClient";
 import ChangePassword from "./Pages/Admin/ChangePassword";
 import EditRole from "./Pages/Admin/EditRole";
 import AddNewRole from "./Pages/Admin/AddNewRole";
@@ -107,6 +110,14 @@ function App() {
 						}
 					/>
 					<Route
+						path="/admin/listclients"
+						element={
+							<ProtectedRoute>
+								<ListClients />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
 						path="/admin/listprojects"
 						element={
 							<ProtectedRoute>
@@ -140,6 +151,15 @@ function App() {
 					/>
 
 					<Route
+						path="/admin/newclient"
+						element={
+							<ProtectedRoute>
+								<AddNewClient />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
 						path="/admin/newadmin"
 						element={
 							<ProtectedRoute>
@@ -162,6 +182,15 @@ function App() {
 						element={
 							<ProtectedRoute>
 								<EditAdminProfile />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
+						path="/admin/editclient"
+						element={
+							<ProtectedRoute>
+								<EditClient />
 							</ProtectedRoute>
 						}
 					/>

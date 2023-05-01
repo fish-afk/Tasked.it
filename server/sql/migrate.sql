@@ -11,15 +11,15 @@ CREATE TABLE IF NOT EXISTS `Admins`(
 );
 
 CREATE TABLE IF NOT EXISTS `Clients`(
-    `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
-    `description` VARCHAR(255) NOT NULL
+    `name` VARCHAR(255) NOT NULL PRIMARY KEY,
+    `description` TEXT NOT NULL,
+    `email` TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `Roles`(
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
-    `description` VARCHAR(255) NOT NULL
+    `description` TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `Freelancers`(
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `FreelancerRoles`(
 CREATE TABLE IF NOT EXISTS `Tasks`(
     `id` BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
+    `description` TEXT NOT NULL,
     `Freelancer_id` VARCHAR(255),
     `due_date` DATE NOT NULL,
     `project_id` BIGINT UNSIGNED,
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `Projects`(
     `name` VARCHAR(255) NOT NULL,
     `duration_in_days` BIGINT UNSIGNED NOT NULL,
     `completed` TINYINT(1) NOT NULL DEFAULT 0,
-    `client` BIGINT UNSIGNED,
+    `client` VARCHAR(255),
     `Admin` VARCHAR(255),
     `total_funding` DOUBLE NOT NULL
 );
@@ -62,7 +62,7 @@ ALTER TABLE
 ALTER TABLE
     `Tasks` ADD CONSTRAINT `tasks_project_id_foreign` FOREIGN KEY(`project_id`) REFERENCES `Projects`(`id`) ON UPDATE CASCADE ON DELETE SET NULL;
 ALTER TABLE
-    `Projects` ADD CONSTRAINT `projects_client_foreign` FOREIGN KEY(`client`) REFERENCES `Clients`(`id`) ON UPDATE CASCADE ON DELETE SET NULL;
+    `Projects` ADD CONSTRAINT `projects_client_foreign` FOREIGN KEY(`client`) REFERENCES `Clients`(`name`) ON UPDATE CASCADE ON DELETE SET NULL;
 ALTER TABLE
     `FreelancerRoles` ADD CONSTRAINT `freelancerroles_role_foreign` FOREIGN KEY(`role`) REFERENCES `Roles`(`id`) ON UPDATE CASCADE ON DELETE SET NULL;
 ALTER TABLE

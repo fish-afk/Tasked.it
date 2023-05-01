@@ -92,7 +92,7 @@ function registerFreelancer(req, res) {
 			fullname,
 			age,
 		};
-		let count = 0;
+		
 
 		// check if username exists
 		Model.connection.query(
@@ -126,7 +126,7 @@ function registerFreelancer(req, res) {
 								message: "Unknown error",
 							});
 						}
-
+						let count = 0;
 						// set roles
 						for (let i = 0; i < roles?.length; i++) {
 							let set = {
@@ -193,6 +193,7 @@ async function updateFreelancer(req, res) {
 							});
 						} else {
 							if (roles?.length > 1) {
+								let count = 0;
 								for (let i = 0; i < roles?.length; i++) {
 									let set = {
 										freelancer: username,

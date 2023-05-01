@@ -71,30 +71,79 @@ const new_project = (req, res) => {
 		});
 	}
 
-	const { name, duration_in_days, total_funding, client, Admin } = req.body;
+	const { name, duration_in_days, total_funding, client, tasks } =
+		req.body;
+	
+	const Admin = req.decoded['username'];
 
 	const new_ = { name, duration_in_days, total_funding, client, Admin };
 
-	if (!name || !duration_in_days || !total_funding || !client || !Admin) {
+	if (
+		!name ||
+		!duration_in_days ||
+		!total_funding ||
+		!client ||
+		!Admin ||
+		!tasks
+	) {
 		return res.send({
 			status: "FAILURE",
 			message: "Missing details",
 		});
-	} else {
-		const query = "INSERT INTO Projects SET ?";
+	}
 
-		Model.connection.query(query, [new_], (err, results) => {
-			if (err) {
-				console.log(err);
-				return res.send({ status: "FAILURE", message: "Unknown error" });
-			} else {
-				return res.send({
-					status: "SUCCESS",
-					message: "Created new project successfully",
-				});
-			}
+	if (tasks?.length) {
+		return res.send({
+			status: "FAILURE",
+			message: "Atleast 1 task needed on project creation",
 		});
 	}
+
+	const query = "INSERT INTO Projects SET ?";
+
+	Model.connection.query(query, [new_], (err, results) => {
+		if (err) {
+			console.log(err);
+			return res.send({ status: "FAILURE", message: "Unknown error" });
+		} else {
+			let count = 0;
+			// set tasks
+			for (let i = 0; i < tasks?.length; i++) {
+				let set = {
+					name: tasks[i]?.name,
+					description: tasks[i]?.description,
+					Freelancer_id: tasks[i]?.Freelancer_id,
+					due_date: tasks[i]?.due_date,
+					price_allocation: tasks[i]?.price_allocation,
+					project_id: tasks[i]?.project_id,
+				};
+
+				Model.connection.query(
+					"INSERT INTO Tasks SET ?",
+					set,
+					(err, resultss) => {
+						if (err) {
+							console.log(err);
+							return res.status(500).send({
+								status: "FAILURE",
+								message: "Error creating tasks.",
+							});
+						}
+
+						count++;
+
+						if (count === tasks?.length) {
+							return res.send({
+								status: "SUCCESS",
+								message: "Created new project successfully"
+							});
+						}
+					},
+				);
+			}
+			
+		}
+	});
 };
 
 const delete_project = (req, res) => {
