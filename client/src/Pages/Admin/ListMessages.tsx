@@ -116,13 +116,18 @@ export default function ListMessages() {
 						<div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
 							{receivedMessages.map((msg) => (
 								<div key={msg._id} className="col border border-info rounded-2">
-									<div className="card h-100 message">
+									<div className="border border-info rounded-2 card h-100 message msg text-white">
 										<div className="card-body">
 											<h5 className="card-title">From: {msg.from}</h5>
-											<h6 className="card-subtitle mb-2 text-muted">
+											<h6 className="card-subtitle mb-2">
 												Date: {msg.date_sent}
 											</h6>
-											<p className="card-text">{msg.Message}</p>
+											<h6 className="card-subtitle mb-2">
+												Time: {msg.time_sent}
+											</h6>
+											<p className="card-text">
+												<b>Message:</b> {msg.Message}
+											</p>
 										</div>
 									</div>
 								</div>
@@ -150,13 +155,13 @@ export default function ListMessages() {
 						<div className="row row-cols-1 row-cols-md-3">
 							{sentMessages.map((msg) => (
 								<div key={msg._id} className="col p-2">
-									<div className="border border-info rounded-2 card h-100 message">
+									<div className="border border-info rounded-2 card h-100 message msg text-white">
 										<div className="card-body">
 											<h5 className="card-title">To: {msg.to}</h5>
-											<h6 className="card-subtitle mb-2 text-muted">
+											<h6 className="card-subtitle mb-2">
 												Date: {msg.date_sent}
 											</h6>
-											<h6 className="card-subtitle mb-2 text-muted">
+											<h6 className="card-subtitle mb-2">
 												Time: {msg.time_sent}
 											</h6>
 											<p className="card-text">

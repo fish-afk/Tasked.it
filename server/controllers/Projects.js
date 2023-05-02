@@ -71,7 +71,7 @@ const new_project = (req, res) => {
 		});
 	}
 
-	const { name, duration_in_days, total_funding, client, tasks } =
+	const { name, duration_in_days, total_funding, client } =
 		req.body;
 	
 	const Admin = req.decoded['username'];
@@ -83,8 +83,7 @@ const new_project = (req, res) => {
 		!duration_in_days ||
 		!total_funding ||
 		!client ||
-		!Admin ||
-		!tasks
+		!Admin
 	) {
 		return res.send({
 			status: "FAILURE",
@@ -106,42 +105,10 @@ const new_project = (req, res) => {
 			console.log(err);
 			return res.send({ status: "FAILURE", message: "Unknown error" });
 		} else {
-			let count = 0;
-			// set tasks
-			for (let i = 0; i < tasks?.length; i++) {
-				let set = {
-					name: tasks[i]?.name,
-					description: tasks[i]?.description,
-					Freelancer_id: tasks[i]?.Freelancer_id,
-					due_date: tasks[i]?.due_date,
-					price_allocation: tasks[i]?.price_allocation,
-					project_id: tasks[i]?.project_id,
-				};
-
-				Model.connection.query(
-					"INSERT INTO Tasks SET ?",
-					set,
-					(err, resultss) => {
-						if (err) {
-							console.log(err);
-							return res.status(500).send({
-								status: "FAILURE",
-								message: "Error creating tasks.",
-							});
-						}
-
-						count++;
-
-						if (count === tasks?.length) {
-							return res.send({
-								status: "SUCCESS",
-								message: "Created new project successfully"
-							});
-						}
-					},
-				);
-			}
-			
+			return res.send({
+				status: "SUCCESS",
+				message: "Created new project successfully",
+			});
 		}
 	});
 };

@@ -6,6 +6,7 @@ import {
 	AiOutlineKey,
 	AiFillMessage,
 } from "react-icons/ai";
+import {SiTask} from "react-icons/si"
 import { RiAdminLine } from "react-icons/ri"
 import { BsPersonLinesFill } from "react-icons/bs"
 import { GoPerson } from "react-icons/go"
@@ -67,6 +68,12 @@ const Navbar = ({ priv }: NavProps) => {
 					<Link to="/admin/listprojects" className="nav-link text-white">
 						<AiFillProject className="bi me-2 mb-1" />
 						Projects
+					</Link>
+				</li>
+				<li>
+					<Link to="/admin/listtasks" className="nav-link text-white">
+						<SiTask className="bi me-2 mb-1" />
+						Tasks
 					</Link>
 				</li>
 				<li>

@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
-import { Project } from "../../Interfaces/Project";
+import { Task } from "../../Interfaces/Task";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-export default function ListProjects() {
+export default function ShowTasksByProject() {
+    const LocationHook = useLocation();
 	const Navigate = useNavigate();
-	const [projects, setprojects] = useState<Project[]>([]);
+	const [tasks, settasks] = useState<Task[]>([]);
 
-	const delete_project = (Project_id: number) => {
-		const msg: string = "Are you sure you want to remove this Project?";
+	const delete_task = (Task_id: number) => {
+		const msg: string = "Are you sure you want to remove this Task?";
 		const txt: string =
 			"This will un-link it from any freelancers its attached to and also any tasks !";
 		Swal.fire({
@@ -31,7 +33,7 @@ export default function ListProjects() {
 					localStorage.getItem("username"),
 				).replaceAll('"', "");
 
-				const response = await fetch(`${SERVER_URL}/projects/deleteproject`, {
+				const response = await fetch(`${SERVER_URL}/tasks/deleteproject`, {
 					headers: {
 						"taskedit-accesstoken": token,
 						username: username,
@@ -41,7 +43,7 @@ export default function ListProjects() {
 
 					method: "DELETE",
 					body: JSON.stringify({
-						id: Project_id,
+						id: Task_id,
 					}),
 				});
 
@@ -51,7 +53,7 @@ export default function ListProjects() {
 
 				if (data.status == "SUCCESS") {
 					Swal.fire({
-						title: "Deleted Project with id: " + Project_id + " Successfully",
+						title: "Deleted Task with id: " + Task_id + " Successfully",
 						timer: 3000,
 						icon: "success",
 					}).then(() => {
@@ -59,7 +61,7 @@ export default function ListProjects() {
 					});
 				} else {
 					Swal.fire({
-						title: "Error deleting Project. Try later",
+						title: "Error deleting Task. Try later",
 						timer: 3000,
 						icon: "error",
 					}).then(() => {
@@ -80,20 +82,24 @@ export default function ListProjects() {
 				localStorage.getItem("username"),
 			).replaceAll('"', "");
 
-			const response = await fetch(`${SERVER_URL}/projects/getallprojects`, {
+			const response = await fetch(`${SERVER_URL}/tasks/gettasksforproject`, {
 				headers: {
 					"taskedit-accesstoken": token,
 					username: username,
 					isadmin: "true",
+					"Content-Type": "application/json",
 				},
-				method: "GET",
+				body: JSON.stringify({
+					project_id: LocationHook.state.id,
+                }),
+                method: "POST"
 			});
 
 			const data = await response.json();
 
 			console.log(data);
 			if (data.status == "SUCCESS") {
-				setprojects(data.data);
+				settasks(data.data);
 			}
 		};
 
@@ -105,32 +111,34 @@ export default function ListProjects() {
 			<Navbar priv="admin" />
 			<div className="container">
 				<div className="title text-center p-3">
-					<h1 className="fw-light">List of Projects</h1>
+                    <h1 className="fw-light">List of tasks for {LocationHook.state.name}</h1>
 				</div>
 
 				<div className="container-fluid mt-3">
 					<div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-						{projects.map((Project) => (
-							<div className="col p-2" key={Project.id}>
+						{tasks.map((Task) => (
+							<div className="col p-2" key={Task.id}>
 								<div className="card h-100 border border-info rounded-2 bg-dark text-white">
 									<div className="card-body">
-										<h5 className="card-title">Name: {Project.name}</h5>
+										<h5 className="card-title">Name: {Task.name}</h5>
+										<p className="card-text">Description: {Task.description}</p>
 										<p className="card-text">
-											Duration given in days: {Project.duration_in_days}
+											Price allocated: ${Task.price_allocation}
+										</p>
+										<p className="card-text">Due date: {Task.due_date}</p>
+										<p className="card-text">Project id: {Task.project_id}</p>
+
+										<p className="card-text">
+											Freelancer assigned to: {Task.Freelancer_id}
 										</p>
 										<p className="card-text">
-											Funding: ${Project.total_funding}
-										</p>
-										<p className="card-text">Client name: {Project.client}</p>
-										<p className="card-text">Project Admin: {Project.Admin}</p>
-										<p className="card-text">
-											Completed: {Project.completed == 0 ? "false" : "true"}
+											Completed: {Task.completed == 0 ? "false" : "true"}
 										</p>
 										<button
 											className="btn btn-warning me-2"
 											onClick={() => {
-												Navigate("/admin/editproject", {
-													state: { ...Project },
+												Navigate("/admin/edittask", {
+													state: { ...Task },
 												});
 											}}
 										>
@@ -139,21 +147,10 @@ export default function ListProjects() {
 										<button
 											className="btn btn-danger me-2"
 											onClick={() => {
-												delete_project(Project.id);
+												delete_task(Task.id);
 											}}
 										>
 											Remove
-										</button>
-
-										<button
-											className="btn btn-info"
-											onClick={() => {
-												Navigate("/admin/showtasksbyproject", {
-													state: { ...Project },
-												});
-											}}
-										>
-											Show tasks
 										</button>
 									</div>
 								</div>
@@ -162,16 +159,7 @@ export default function ListProjects() {
 					</div>
 				</div>
 
-				<div className="d-flex justify-content-center pt-4">
-					<button
-						className="btn btn-primary fw-bold"
-						onClick={() => {
-							Navigate("/admin/newproject");
-						}}
-					>
-						+ Create New Project
-					</button>
-				</div>
+				
 			</div>
 		</div>
 	);

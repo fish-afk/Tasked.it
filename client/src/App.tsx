@@ -6,33 +6,37 @@ import "./Styles/App.css";
 import AdminHome from "./Pages/Admin/AdminHome";
 import FreelancerHome from "./Pages/Freelancer/FreelancerHome";
 
-import AdminRedirect from "./Pages/Admin/AdminRedirect";
-import FreelancerRedirect from "./Pages/Freelancer/FreelancerRedirect";
-
 import ListFreelancers from "./Pages/Admin/ListFreelancers";
 import ListAdmins from "./Pages/Admin/ListAdmins";
 import ListMessages from "./Pages/Admin/ListMessages";
 import ListProjects from "./Pages/Admin/ListProjects";
+import ListTasks from "./Pages/Admin/ListTasks";
 import ListRoles from "./Pages/Admin/ListRoles";
 import ListClients from "./Pages/Admin/ListClients";
+import ShowTasksByProject from "./Pages/Admin/ShowTasksByProject";
 
 import AddNewFreelancer from "./Pages/Admin/AddNewFreelancer";
 import AddNewAdmin from "./Pages/Admin/AddNewAdmin";
 import AddNewClient from "./Pages/Admin/AddNewClient";
+import AddNewTask from "./Pages/Admin/AddNewTask";
+import AddNewRole from "./Pages/Admin/AddNewRole";
+import AddNewProject from "./Pages/Admin/AddNewProject";
+
 import EditFreelancer from "./Pages/Admin/EditFreelancer";
 import EditAdminProfile from "./Pages/Admin/EditProfile";
 import EditClient from "./Pages/Admin/EditClient";
-import ChangePassword from "./Pages/Admin/ChangePassword";
 import EditRole from "./Pages/Admin/EditRole";
-import AddNewRole from "./Pages/Admin/AddNewRole";
 import EditProject from "./Pages/Admin/EditProject";
-import AddNewProject from "./Pages/Admin/AddNewProject";
+import EditTask from "./Pages/Admin/EditTask";
 
 import Index from "./Pages";
 import AdminLogin from "./Pages/auth/AdminLogin";
 import FreelancerLogin from "./Pages/auth/FreelancerLogin";
 import Logout from "./Pages/auth/Logout";
 import ProtectedRoute from "./Pages/auth/ProtectedRoute";
+import ChangePassword from "./Pages/Admin/ChangePassword";
+import AdminRedirect from "./Pages/Admin/AdminRedirect";
+import FreelancerRedirect from "./Pages/Freelancer/FreelancerRedirect";
 
 function App() {
 	const Nav = useNavigate();
@@ -67,9 +71,10 @@ function App() {
 		}
 	};
 
-	const REFRESH_AUTH_MINUTE_MS: number = 300000;
+	
 
 	useEffect(() => {
+		const REFRESH_AUTH_MINUTE_MS: number = 300000;
 		const interval = setInterval(() => {
 			func();
 		}, REFRESH_AUTH_MINUTE_MS);
@@ -126,6 +131,23 @@ function App() {
 						}
 					/>
 					<Route
+						path="/admin/listtasks"
+						element={
+							<ProtectedRoute>
+								<ListTasks />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
+						path="/admin/showtasksbyproject"
+						element={
+							<ProtectedRoute>
+								<ShowTasksByProject />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
 						path="/admin/listmessages"
 						element={
 							<ProtectedRoute>
@@ -169,6 +191,15 @@ function App() {
 					/>
 
 					<Route
+						path="/admin/newtask"
+						element={
+							<ProtectedRoute>
+								<AddNewTask />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
 						path="/admin/editfreelancer"
 						element={
 							<ProtectedRoute>
@@ -191,6 +222,15 @@ function App() {
 						element={
 							<ProtectedRoute>
 								<EditClient />
+							</ProtectedRoute>
+						}
+					/>
+
+					<Route
+						path="/admin/edittask"
+						element={
+							<ProtectedRoute>
+								<EditTask />
 							</ProtectedRoute>
 						}
 					/>

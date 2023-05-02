@@ -2,24 +2,33 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
-import { Project } from "../../Interfaces/Project";
+import { Task } from "../../Interfaces/Task";
+import { useLocation } from "react-router-dom";
 
-
-export default function AddNewProject(): JSX.Element {
-	const [formValues, setFormValues] = useState<Project>({
+export default function EditTask(): JSX.Element {
+    const LocationHook = useLocation();
+	const [formValues, setFormValues] = useState<Task>({
 		id: 0,
 		name: "",
-		duration_in_days: 0,
-		Admin: "",
-		client: 0, // client not needed here
-		completed: false, // completed not needed as it auto completes when all tasks complete
-		total_funding: 0,
+		description: "",
+		price_allocation: 0,
+		project_id: "",
+		due_date: "",
+		Freelancer_id: "",
+		completed: false,
 	});
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		const { name, duration_in_days, Admin, total_funding } = formValues;
+		const {
+			name,
+			description,
+			price_allocation,
+			project_id,
+			due_date,
+			Freelancer_id,
+		} = formValues;
 
 		const token = JSON.stringify(
 			localStorage.getItem("taskedit-accesstoken"),
@@ -30,8 +39,8 @@ export default function AddNewProject(): JSX.Element {
 		).replaceAll('"', "");
 
 		try {
-			const response = await fetch(`${SERVER_URL}/projects/newproject`, {
-				method: "POST",
+			const response = await fetch(`${SERVER_URL}/tasks/edittask`, {
+				method: "PATCH",
 				headers: {
 					"Content-Type": "application/json",
 					"taskedit-accesstoken": token,
@@ -39,17 +48,20 @@ export default function AddNewProject(): JSX.Element {
 					isadmin: "true",
 				},
 				body: JSON.stringify({
+					task_id: LocationHook.state.id,
 					name,
-					duration_in_days,
-					Admin,
-					total_funding,
+					description,
+					price_allocation,
+					project_id: LocationHook.state.project_id,
+					due_date,
+					Freelancer_id,
 				}),
 			});
 
 			const data = await response.json();
 			if (data.status == "SUCCESS") {
 				Swal.fire({
-					title: "Created project successfully",
+					title: "Updated Task successfully",
 					timer: 3000,
 					icon: "success",
 				}).then(() => {
@@ -74,17 +86,18 @@ export default function AddNewProject(): JSX.Element {
 			<Navbar priv="admin" />
 			<div className="container">
 				<div className="d-flex justify-content-center p-4">
-					<h1>Create New Project</h1>
+					<h1>Edit Task</h1>
 				</div>
 
 				<form className="bg-dark p-5 rounded-3" onSubmit={handleSubmit}>
 					<div className="form-outline mb-4">
 						<label className="text-white form-label" htmlFor="form6Example5">
-							Name of project
+							Name of Task
 						</label>
 						<input
 							required
 							type="text"
+							placeholder={LocationHook.state.name}
 							minLength={4}
 							id="form6Example5"
 							className="form-control"
@@ -100,18 +113,20 @@ export default function AddNewProject(): JSX.Element {
 
 					<div className="form-outline mb-4">
 						<label className="text-white form-label" htmlFor="form6Example5">
-							Duration to complete the project (in days)
+							Description
 						</label>
 						<input
 							required
-							type="number"
-							min={1}
+							type="text"
+							placeholder={LocationHook.state.description}
+							minLength={10}
+							maxLength={100}
 							id="form6Example5"
 							className="form-control"
 							onChange={(e) =>
 								setFormValues({
 									...formValues,
-									duration_in_days: e.target.value,
+									description: e.target.value,
 								})
 							}
 						/>
@@ -119,18 +134,18 @@ export default function AddNewProject(): JSX.Element {
 
 					<div className="form-outline mb-4">
 						<label className="text-white form-label" htmlFor="form6Example5">
-							Total Funding ($)
+							Due date
 						</label>
 						<input
 							required
-							type="number"
-							min={100}
+							type="date"
+							placeholder={LocationHook.state.date}
 							id="form6Example5"
 							className="form-control"
 							onChange={(e) =>
 								setFormValues({
 									...formValues,
-									total_funding: e.target.value,
+									due_date: e.target.value,
 								})
 							}
 						/>
@@ -138,18 +153,40 @@ export default function AddNewProject(): JSX.Element {
 
 					<div className="form-outline mb-4">
 						<label className="text-white form-label" htmlFor="form6Example5">
-							Client name
+							Price Allocation ($)
 						</label>
 						<input
 							required
 							type="number"
+							placeholder={LocationHook.state.price_allocation}
 							min={100}
 							id="form6Example5"
 							className="form-control"
 							onChange={(e) =>
 								setFormValues({
 									...formValues,
-									total_funding: e.target.value,
+									price_allocation: e.target.value,
+								})
+							}
+						/>
+					</div>
+
+					
+
+					<div className="form-outline mb-4">
+						<label className="text-white form-label" htmlFor="form6Example5">
+							Freelancer Assigned to
+						</label>
+						<input
+							required
+							type="text"
+							id="form6Example5"
+							placeholder={LocationHook.state.Freelancer_id}
+							className="form-control"
+							onChange={(e) =>
+								setFormValues({
+									...formValues,
+									Freelancer_id: e.target.value,
 								})
 							}
 						/>
@@ -157,7 +194,7 @@ export default function AddNewProject(): JSX.Element {
 
 					<div className="d-flex justify-content-center p-4">
 						<button className="btn btn-primary" onClick={(e) => handleSubmit}>
-							SAVE
+							SAVE TASK
 						</button>
 					</div>
 				</form>
