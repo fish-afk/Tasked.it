@@ -17,6 +17,8 @@ export default function FreelancerLogin({ setusername }: any) {
 
 			const data = await response.json();
 
+			console.log(data)
+
 			if (data.status == "SUCCESS" || (data.accessToken && data.refreshToken)) {
 				localStorage.setItem("taskedit-accesstoken", data.accessToken);
 				localStorage.setItem("taskedit-refreshtoken", data.refreshToken);

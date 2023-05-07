@@ -6,7 +6,7 @@ const SALT_ROUNDS = 10;
 
 // async function to login a user
 async function login(req, res) {
-	const { username, password } = req;
+	const { username, password } = req.body;
 	Model.connection.query(
 		"SELECT * FROM Freelancers WHERE username = ?",
 		[username],
@@ -27,7 +27,7 @@ async function login(req, res) {
 					if (!match) {
 						return res.send({
 							status: "FAILURE",
-							message: "Invalid username or password",
+							message: "Invalid username or password2",
 						});
 					}
 
@@ -42,8 +42,8 @@ async function login(req, res) {
 					);
 
 					return res.send({
-						refreshtoken: refreshToken,
-						accesstoken: accessToken,
+						refreshToken: refreshToken,
+						accessToken: accessToken,
 					});
 				});
 			}

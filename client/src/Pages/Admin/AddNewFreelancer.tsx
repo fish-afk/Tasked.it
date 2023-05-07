@@ -25,8 +25,9 @@ export default function AddNewFreelancer(): JSX.Element {
 					"taskedit-accesstoken": token,
 					username: username,
 					isadmin: "true",
+					"Content-Type": "application/json"
 				},
-				method: "POST",
+			
 			});
 
 			const data = await response.json();
@@ -88,7 +89,7 @@ export default function AddNewFreelancer(): JSX.Element {
 				localStorage.getItem("username"),
 			).replaceAll('"', "");
 
-			const response = await fetch(`${SERVER_URL}/freelancers/update`, {
+			const response = await fetch(`${SERVER_URL}/freelancers/register`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

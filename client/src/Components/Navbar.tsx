@@ -128,7 +128,97 @@ const Navbar = ({ priv }: NavProps) => {
 			</div>
 		</div>
 	) : (
-		<></>
+		<div
+			className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark"
+			style={{ width: "280px", height: "100vh" }}
+		>
+			<Link
+				to="#"
+				className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+			>
+				<svg className="bi me-2" width="40" height="32">
+					<use xlinkHref="#bootstrap"></use>
+				</svg>
+				<span className="fs-4">VTE Freelancers</span>
+			</Link>
+
+			<hr />
+			<ul className="nav nav-pills flex-column mb-auto">
+				<li className="nav-item">
+					<Link
+						to={`/freelancer/home`}
+						className="nav-link text-white"
+						aria-current="page"
+					>
+						<AiFillHome className="bi me-2 mb-1" />
+						Home
+					</Link>
+				</li>
+				
+				<li>
+					<Link to="/freelancer/listadmins" className="nav-link text-white">
+						<RiAdminLine className="bi me-2 mb-1" />
+						Admins
+					</Link>
+				</li>
+				
+				<li>
+					<Link to="/freelancer/listtasks" className="nav-link text-white">
+						<SiTask className="bi me-2 mb-1" />
+						Tasks
+					</Link>
+				</li>
+				<li>
+					<Link to="/freelancer/listroles" className="nav-link text-white">
+						<AiOutlineKey className="bi me-2 mb-1" />
+						Roles
+					</Link>
+				</li>
+				<li>
+					<Link to="/freelancer/listmessages" className="nav-link text-white">
+						<AiFillMessage className="bi me-2 mb-1" />
+						Messages
+					</Link>
+				</li>
+			</ul>
+			<hr />
+
+			<div
+				className="container text-white btn btn-primary mb-3"
+				onClick={() => {
+					Navigate("/freelancer/editprofile");
+				}}
+			>
+				<h4>Edit Profile</h4>
+			</div>
+			<div
+				className="container text-dark btn btn-warning mb-3"
+				onClick={() => {
+					Navigate("/freelancer/changepassword");
+				}}
+			>
+				<h4>Change Password</h4>
+			</div>
+			<div
+				className="container text-white btn btn-danger"
+				onClick={() => {
+					Swal.fire({
+						title: "Are you sure you want to logout?",
+						icon: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#3085d6",
+						cancelButtonColor: "#d33",
+						confirmButtonText: "Yes",
+					}).then((result) => {
+						if (result.isConfirmed) {
+							Navigate(`/${priv}/logout`);
+						}
+					});
+				}}
+			>
+				<h4>Logout</h4>
+			</div>
+		</div>
 	);
 };
 
