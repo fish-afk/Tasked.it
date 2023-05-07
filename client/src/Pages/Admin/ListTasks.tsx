@@ -4,6 +4,7 @@ import { Task } from "../../Interfaces/Task";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { TiTick } from 'react-icons/ti';
 
 export default function ListTasks() {
 	const Navigate = useNavigate();
@@ -70,6 +71,66 @@ export default function ListTasks() {
 		});
 	};
 
+
+	const Markascompleted = (Task_id: number) => {
+		const msg: string = "Are you sure you want to mark this Task as complete?";
+		
+		Swal.fire({
+			title: msg,
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes",
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				const token = JSON.stringify(
+					localStorage.getItem("taskedit-accesstoken"),
+				).replaceAll('"', "");
+
+				const username = JSON.stringify(
+					localStorage.getItem("username"),
+				).replaceAll('"', "");
+
+				const response = await fetch(`${SERVER_URL}/tasks/markascomplete`, {
+					headers: {
+						"taskedit-accesstoken": token,
+						username: username,
+						isadmin: "true",
+						"Content-Type": "application/json",
+					},
+
+					method: "PATCH",
+					body: JSON.stringify({
+						id: Task_id,
+					}),
+				});
+
+				const data = await response.json();
+
+				console.log(data);
+
+				if (data.status == "SUCCESS") {
+					Swal.fire({
+						title: "marked Task with id: " + Task_id + " as complete.",
+						timer: 3000,
+						icon: "success",
+					}).then(() => {
+						location.reload();
+					});
+				} else {
+					Swal.fire({
+						title: "Error completing Task. Try later",
+						timer: 3000,
+						icon: "error",
+					}).then(() => {
+						location.reload();
+					});
+				}
+			}
+		});
+	};
+
 	useEffect(() => {
 		const func = async () => {
 			const token = JSON.stringify(
@@ -125,9 +186,7 @@ export default function ListTasks() {
 										<p className="card-text">
 											Freelancer assigned to: {Task.Freelancer_id}
 										</p>
-										<p className="card-text">
-											Completed: {Task.completed == 0 ? "false" : "true"}
-										</p>
+
 										<button
 											className="btn btn-warning me-2"
 											onClick={() => {
@@ -146,6 +205,21 @@ export default function ListTasks() {
 										>
 											Remove
 										</button>
+
+										{Task.completed == 0 ? (
+											<button
+												className="btn btn-info me-2"
+												onClick={() => {
+													Markascompleted(Task.id);
+												}}
+											>
+												Mark as completed
+											</button>
+										) : (
+											<p className="card-text btn text-success fw-bold pt-2">
+												Completed <TiTick />
+											</p>
+										)}
 									</div>
 								</div>
 							</div>

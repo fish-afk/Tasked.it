@@ -25,7 +25,6 @@ async function check_ids_exist(freelancer_id, project_id) {
 	let freelancer_results = await Model.connection
 		.promise()
 		.query(freelancer_query, [freelancer_id]);
-	
 
 	if (freelancer_results[0][0].count == 0) {
 		return false;
@@ -45,37 +44,105 @@ async function check_ids_exist(freelancer_id, project_id) {
 	return true;
 }
 
+async function markasComplete(req, res) {
+	const username = req.decoded["username"];
+
+	const { id } = req.body;
+
+	if (req.decoded.privs == "Admin") {
+		const query = "UPDATE Tasks SET completed = 1 WHERE id = ?";
+
+		Model.connection.query(query, [id], (err, results) => {
+			if (!err) {
+				return res.send({
+					status: "SUCCESS",
+					message: "Task marked as completed",
+				});
+			} else {
+				console.log(err);
+				return res.send({ status: "ERROR", message: "An error occurred" });
+			}
+		});
+	} else {
+		const check = "SELECT * FROM Tasks WHERE username = ? AND id = ?";
+
+		Model.connection.query(check, [username, id], (err, resultss) => {
+			if (err || resultss?.length < 1) {
+				console.log(err);
+				return res.send({ status: "ERROR", message: "An error occurred" });
+			} else {
+				const query = "UPDATE Tasks SET completed = 1 WHERE id = ?";
+
+				Model.connection.query(query, [id], (err, results) => {
+					if (!err) {
+						return res.send({
+							status: "SUCCESS",
+							message: "Task marked as completed",
+						});
+					} else {
+						console.log(err);
+						return res.send({ status: "ERROR", message: "An error occurred" });
+					}
+				});
+			}
+		});
+	}
+}
 
 // CREATE task
 async function create_task(req, res) {
 	if (req.decoded.privs !== "Admin") {
 		return res.send("Insufficient privileges");
 	} else {
-		const { name, description, Freelancer_id, due_date, project_id, price_allocation } = req.body;
+		const {
+			name,
+			description,
+			Freelancer_id,
+			due_date,
+			project_id,
+			price_allocation,
+		} = req.body;
 		if (!name || !description || !due_date || !price_allocation) {
-			return res.send({ status: "FAILURE", message: "Missing required details" });
+			return res.send({
+				status: "FAILURE",
+				message: "Missing required details",
+			});
 		}
 
-		if (await check_ids_exist(Freelancer_id, project_id) == false) {
-
-			return res.send({status: "FAILURE", message: 'Freelancer username or project id invalid'})
+		if ((await check_ids_exist(Freelancer_id, project_id)) == false) {
+			return res.send({
+				status: "FAILURE",
+				message: "Freelancer username or project id invalid",
+			});
 		}
 
-		
-		let query = "INSERT INTO Tasks (name, description, Freelancer_id, due_date, project_id, price_allocation) VALUES (?, ?, ?, ?, ?, ?)";
+		let query =
+			"INSERT INTO Tasks (name, description, Freelancer_id, due_date, project_id, price_allocation) VALUES (?, ?, ?, ?, ?, ?)";
 
-		Model.connection.query(query, [name, description, Freelancer_id, due_date, project_id, price_allocation], (err, results) => {
-			if (!err) {
-				return res.send({ status: "SUCCESS", message: "Task created successfully" });
-			} else {
-				console.log(err);
-				return res.send({ status: "ERROR", message: "An error occurred" });
-			}
-		});
+		Model.connection.query(
+			query,
+			[
+				name,
+				description,
+				Freelancer_id,
+				due_date,
+				project_id,
+				price_allocation,
+			],
+			(err, results) => {
+				if (!err) {
+					return res.send({
+						status: "SUCCESS",
+						message: "Task created successfully",
+					});
+				} else {
+					console.log(err);
+					return res.send({ status: "ERROR", message: "An error occurred" });
+				}
+			},
+		);
 	}
 }
-
-
 
 async function update_task(req, res) {
 	// Check if the user has sufficient privileges
@@ -106,7 +173,7 @@ async function update_task(req, res) {
 		completed,
 	} = req.body;
 
-	if (await check_ids_exist(Freelancer_id, project_id) == false) {
+	if ((await check_ids_exist(Freelancer_id, project_id)) == false) {
 		return res.send({
 			status: "FAILURE",
 			message: "Freelancer username or project id invalid",
@@ -152,7 +219,6 @@ async function update_task(req, res) {
 	});
 }
 
-
 async function get_tasks_for_project(req, res) {
 	if (req.decoded.privs != "Admin") {
 		return res.send("Insufficient privileges");
@@ -196,5 +262,6 @@ module.exports = {
 	get_tasks_for_project,
 	get_all_tasks,
 	create_task,
-	update_task
+	update_task,
+	markasComplete,
 };

@@ -4,6 +4,7 @@ import { Project } from "../../Interfaces/Project";
 import SERVER_URL from "../../Constants/server_url";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { TiTick } from "react-icons/ti";
 
 export default function ListProjects() {
 	const Navigate = useNavigate();
@@ -70,6 +71,66 @@ export default function ListProjects() {
 		});
 	};
 
+	const Markascompleted = (Project_id: number) => {
+		const msg: string = "Are you sure you want to mark this Project as complete?";
+
+		Swal.fire({
+			title: msg,
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes",
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				const token = JSON.stringify(
+					localStorage.getItem("taskedit-accesstoken"),
+				).replaceAll('"', "");
+
+				const username = JSON.stringify(
+					localStorage.getItem("username"),
+				).replaceAll('"', "");
+
+				const response = await fetch(`${SERVER_URL}/projects/markascomplete`, {
+					headers: {
+						"taskedit-accesstoken": token,
+						username: username,
+						isadmin: "true",
+						"Content-Type": "application/json",
+					},
+
+					method: "PATCH",
+					body: JSON.stringify({
+						id: Project_id,
+					}),
+				});
+
+				const data = await response.json();
+
+				console.log(data);
+
+				if (data.status == "SUCCESS") {
+					Swal.fire({
+						title: "marked Project with id: " + Project_id + " as complete.",
+						timer: 3000,
+						icon: "success",
+					}).then(() => {
+						location.reload();
+					});
+				} else {
+					Swal.fire({
+						title: "Error completing Project. Try later",
+						timer: 3000,
+						icon: "error",
+					}).then(() => {
+						location.reload();
+					});
+				}
+			}
+		});
+	};
+
+
 	useEffect(() => {
 		const func = async () => {
 			const token = JSON.stringify(
@@ -123,9 +184,7 @@ export default function ListProjects() {
 										</p>
 										<p className="card-text">Client name: {Project.client}</p>
 										<p className="card-text">Project Admin: {Project.Admin}</p>
-										<p className="card-text">
-											Completed: {Project.completed == 0 ? "false" : "true"}
-										</p>
+
 										<button
 											className="btn btn-warning me-2"
 											onClick={() => {
@@ -155,6 +214,21 @@ export default function ListProjects() {
 										>
 											Show tasks
 										</button>
+
+										{Project.completed == 0 ? (
+											<button
+												className="btn btn-primary mt-2"
+												onClick={() => {
+													Markascompleted(Project.id);
+												}}
+											>
+												Mark as completed
+											</button>
+										) : (
+											<p className="card-text btn text-success fw-bold pt-2 mt-2">
+												Completed <TiTick />
+											</p>
+										)}
 									</div>
 								</div>
 							</div>

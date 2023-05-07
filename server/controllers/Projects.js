@@ -62,6 +62,33 @@ const edit_project = async (req, res) => {
 		});
 	}
 };
+async function markasComplete(req, res) {
+
+	const { id } = req.body;
+
+	if (req.decoded.privs != "Admin") {
+		return res.send({
+			status: "FAILURE",
+			message: "Insufficient privileges",
+		});
+	} else {
+		
+		const query = "UPDATE Projects SET completed = 1 WHERE id = ?";
+
+		Model.connection.query(query, [id], (err, results) => {
+			if (!err) {
+				return res.send({
+					status: "SUCCESS",
+					message: "Project marked as completed",
+				});
+			} else {
+				console.log(err);
+				return res.send({ status: "ERROR", message: "An error occurred" });
+			}
+		});
+		
+	}
+}
 
 const new_project = (req, res) => {
 	if (req.decoded.privs != "Admin") {
@@ -147,4 +174,5 @@ module.exports = {
 	edit_project,
 	new_project,
 	delete_project,
+	markasComplete
 };

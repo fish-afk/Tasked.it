@@ -9,5 +9,6 @@ router.post("/gettasksforproject", authMiddleware.verifyJWT, tasksController.get
 router.get('/getalltasks', authMiddleware.verifyJWT, tasksController.get_all_tasks)
 router.post('/newtask', authMiddleware.verifyJWT, tasksController.create_task)
 router.patch('/edittask', authMiddleware.verifyJWT, tasksController.update_task)
+router.patch('/markascomplete', authMiddleware.verifyJWT, tasksController.markasComplete);
 
 module.exports = router;
