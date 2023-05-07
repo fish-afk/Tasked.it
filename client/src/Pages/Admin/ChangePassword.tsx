@@ -76,7 +76,7 @@ export default function ChangePassword(): JSX.Element {
 			<Navbar priv="admin" />
 			<div className="container">
 				<div className="d-flex justify-content-center p-4">
-					<h1>Update your details</h1>
+					<h1>Change password</h1>
 				</div>
 
 				<form className="bg-dark p-5 rounded-3" onSubmit={handleSubmit}>

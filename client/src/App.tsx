@@ -40,7 +40,6 @@ import FreelancerRedirect from "./Pages/Freelancer/FreelancerRedirect";
 
 function App() {
 	const Nav = useNavigate();
-
 	const func = async () => {
 		const priv: any = localStorage.getItem("priv");
 		const refreshToken: any = localStorage.getItem("taskedit-refreshtoken");
@@ -70,8 +69,6 @@ function App() {
 			Nav(`/${priv}/logout`);
 		}
 	};
-
-	
 
 	useEffect(() => {
 		const REFRESH_AUTH_MINUTE_MS: number = 300000;

@@ -67,3 +67,8 @@ button {
   max-height: 75vh;
   overflow-y: scroll;
 }
+
+.container-fluid-home {
+  max-height: 100vh;
+  overflow-y: scroll;
+}

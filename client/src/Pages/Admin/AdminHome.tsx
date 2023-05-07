@@ -4,6 +4,8 @@ import SERVER_URL from "../../Constants/server_url";
 import { Numbers } from "../../Interfaces/Numbers";
 import { Line } from "react-chartjs-2";
 import LineChart from "../../Components/LineChart";
+import PieChart from "../../Components/Piechart";
+import BarChart from "../../Components/Barchart";
 
 export default function AdminHome() {
 	const [numbers, setnumbers] = useState<Numbers>();
@@ -45,7 +47,7 @@ export default function AdminHome() {
 		labels: UserData.map((data) => data.year),
 		datasets: [
 			{
-				label: "Tasks completed in past weeks",
+				label: "Tasks completed",
 				data: UserData.map((data) => data.userGain),
 				backgroundColor: [
 					"rgba(75,192,192,1)",
@@ -121,9 +123,9 @@ export default function AdminHome() {
 		"",
 	);
 	return (
-		<div className="d-flex " style={{ height: "100vh" }}>
+		<div className="d-flex ">
 			<Navbar priv="admin" />
-			<div className="text-center container">
+			<div className="text-center container-fluid-home">
 				<h1 className="p-4">Welcome {username}.</h1>
 				<h3 className="pb-4">Todays Date: {getDate()}</h3>
 				{/* <h3 className="p-2">
@@ -133,10 +135,19 @@ export default function AdminHome() {
 				<h3 className="p-2">Number of active projects: {numbers?.Projects}</h3>
 				<h3 className="p-2">Total tasks due today: {numbers?.Tasks}</h3> */}
 				<div className="chart-container d-flex">
-					<div style={{ width: 600 }}>
+					<div style={{ width: 600 }} className="mb-5">
 						<LineChart chartData={userData} />
 					</div>
 					<div style={{ width: 600 }}>
+						<BarChart chartData={userData} />
+					</div>
+				</div>
+
+				<div className="chart-container d-flex">
+					<div style={{ width: 700, paddingRight:200, paddingLeft: 200 }}>
+						<PieChart chartData={userData} />
+					</div>
+					<div style={{ width: 600 }} className="ms-5 ps-5">
 						<LineChart chartData={userData} />
 					</div>
 				</div>
