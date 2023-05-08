@@ -24,11 +24,11 @@ INSERT INTO `admins` (`username`, `password`, `email`, `fullname`, `employee_tit
 
 -- Dumping data for table taskedit.clients: ~3 rows (approximately)
 INSERT INTO `clients` (`name`, `description`, `email`) VALUES
-	('Client A', 'A multinational company in the tech industry', "client1@example.com"),
-	('Client B', 'A startup in the healthcare industry',"client2@example.com"),
-	('Client C', 'A non-profit organization in the education sector', "client3@example.com");
+	('Client A', 'A multinational company in the tech industry', 'client1@example.com'),
+	('Client B', 'asdsadasd', 'mirzashihab2@gmail.com'),
+	('Client C', 'A non-profit organization in the education sector', 'client3@example.com');
 
--- Dumping data for table taskedit.freelancerroles: ~10 rows (approximately)
+-- Dumping data for table taskedit.freelancerroles: ~17 rows (approximately)
 INSERT INTO `freelancerroles` (`id`, `role`, `freelancer`) VALUES
 	(1, 1, NULL),
 	(2, 2, NULL),
@@ -39,22 +39,32 @@ INSERT INTO `freelancerroles` (`id`, `role`, `freelancer`) VALUES
 	(7, NULL, 'asdasddfsdfs'),
 	(8, 2, 'asdasddfsdfs'),
 	(9, 1, 'dssad'),
-	(10, 2, 'dssad');
+	(10, 2, 'dssad'),
+	(11, 1, 'slide'),
+	(12, 2, 'slide'),
+	(13, 1, 'free'),
+	(14, 2, 'free'),
+	(15, 1, 'slide_freelancer'),
+	(16, 12, 'slide_freelancer'),
+	(17, 11, 'slide_freelancer');
 
--- Dumping data for table taskedit.freelancers: ~6 rows (approximately)
+-- Dumping data for table taskedit.freelancers: ~9 rows (approximately)
 INSERT INTO `freelancers` (`username`, `fullname`, `password`, `age`, `email`) VALUES
 	('adas', 'asdasd asd asd', '$2b$10$oAAnvz7IvpL187UJByAZSeNuYJG0H72XPHxm8SzFNLOrK1VdzwMxO', '123', 'mirzashihabwq2@gmail.com'),
 	('asdasd', 'asdasddsdad', '$2b$10$kVbZPwIqKHtbxOmBS9euv.D9SCx1GU7Xn1Uf53CEP0cOnXzo/iD4y', '12', 'mirzashihab2@gmail.com'),
 	('asdasddfsdfs', 'fsdfsdfsdf', '$2b$10$BYil0m.Zd590SxbuOuWTWei3Grwf.V0p.dJT0g9V/JI9fBXEpcHva', '1234', 'mirzashihab2@gmail.com'),
 	('dssad', 'sadasdas', '$2b$10$ey4asvEzZrBqAIeCgQpctuZIfnxN4zaULpn/56Sk7Ppx2UWW7iuRy', '12', 'mirzashihab2@gmail.com'),
+	('free', 'free', '$2b$10$9XNS0l095PdNm8m0.5nQdOdygZ./RMwSsXEso5dQXRdj7sBxWjl.K', '12', 'mirzashihab2@gmail.com'),
 	('freelancer2', 'Michael Brown', 'password2', '35', 'michael.brown@example.com'),
-	('freelancer3', 'Lisa Smith', 'password3', '42', 'lisa.smith@example.com');
+	('freelancer3', 'Lisa Smith', 'password3', '42', 'lisa.smith@example.com'),
+	('slide', 'slide', '$2b$10$FuLMXenbZ2WGKgSMCHvV1uTKvwEv3wjXvYZfeVAS8D.7L82lgii2a', '12', 'mirzashihab2@gmail.com'),
+	('slide_freelancer', 'sdadasd', '$2b$10$Gy0RFkwPGlDvRZr81e7yWuWIW54pJ4SUDH2vw21zq560lbQrZJgJC', '34', 'mirzashihab2@gmail.com');
 
 -- Dumping data for table taskedit.projects: ~3 rows (approximately)
-INSERT INTO `projects` (`id`, `name`, `duration_in_days`, `client`, `Admin`, `total_funding`, `completed`) VALUES
-	(1, 'Project A', 6, 'Client A', 'admin1', 50000, 0),
-	(2, 'Project B', 4, 'Client A', 'admin2', 20000, 0),
-	(3, 'Project C', 8, 'Client B', 'admin3', 75000, 0);
+INSERT INTO `projects` (`id`, `name`, `duration_in_days`, `completed`, `client`, `Admin`, `total_funding`) VALUES
+	(1, 'Project A', 6, 0, 'Client A', 'admin1', 50000),
+	(2, 'Project B', 4, 0, 'Client C', 'admin2', 20000),
+	(3, 'Project C', 8, 1, 'Client B', 'admin3', 75000);
 
 -- Dumping data for table taskedit.roles: ~13 rows (approximately)
 INSERT INTO `roles` (`id`, `name`, `description`) VALUES
@@ -74,9 +84,9 @@ INSERT INTO `roles` (`id`, `name`, `description`) VALUES
 
 -- Dumping data for table taskedit.tasks: ~3 rows (approximately)
 INSERT INTO `tasks` (`id`, `name`, `description`, `Freelancer_id`, `due_date`, `project_id`, `price_allocation`, `completed`) VALUES
-	(1, 'Task A', 'Build login functionality', NULL, '2023-06-01', 1, 5000, 0),
-	(2, 'Task B', 'Design homepage layout', NULL, '2023-05-01', 2, 3500, 0),
-	(3, 'Task C', 'Manage project timeline', NULL, '2023-07-01', 3, 8000, 0);
+	(1, 'Task A', 'Build login functionality', 'freelancer2', '2023-06-01', 0, 5000, 0),
+	(2, 'Design Frontend', '', 'freelancer2', '2023-05-28', 2, 1234, 0),
+	(3, 'Task C', 'Manage project timeline', 'asdasd', '2023-07-01', 3, 8000, 0);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

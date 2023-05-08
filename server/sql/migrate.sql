@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `freelancerroles` (
   KEY `freelancerroles_role_foreign` (`role`),
   CONSTRAINT `freelancerroles_freelancer_foreign` FOREIGN KEY (`freelancer`) REFERENCES `freelancers` (`username`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `freelancerroles_role_foreign` FOREIGN KEY (`role`) REFERENCES `roles` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 

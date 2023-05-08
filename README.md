@@ -13,3 +13,5 @@ server folder contains the Node.js code for the backend.
 
 node.js version used: # v16.18.1
 npm version used: # v8.10.0
+mongodb version used # v5.0.9 
+mysql version used # v8.0.32
