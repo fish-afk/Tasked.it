@@ -62,6 +62,44 @@ export default function AdminHome() {
 		],
 	});
 
+	const [userData2, setUserData2] = useState({
+		labels: UserData.map((data) => data.year),
+		datasets: [
+			{
+				label: "Client revenue",
+				data: UserData.map((data) => data.userGain),
+				backgroundColor: [
+					"rgba(75,192,192,1)",
+					"#ecf0f1",
+					"#50AF95",
+					"#f3ba2f",
+					"#2a71d0",
+				],
+				borderColor: "black",
+				borderWidth: 2,
+			},
+		],
+	});
+
+	const [userData3, setUserData3] = useState({
+		labels: UserData.map((data) => data.year),
+		datasets: [
+			{
+				label: "Project ratio by years",
+				data: UserData.map((data) => data.userGain),
+				backgroundColor: [
+					"rgba(75,192,192,1)",
+					"#ecf0f1",
+					"#50AF95",
+					"#f3ba2f",
+					"#2a71d0",
+				],
+				borderColor: "black",
+				borderWidth: 2,
+			},
+		],
+	});
+
 	const func = async () => {
 		const token = JSON.stringify(
 			localStorage.getItem("taskedit-accesstoken"),
@@ -139,16 +177,16 @@ export default function AdminHome() {
 						<LineChart chartData={userData} />
 					</div>
 					<div style={{ width: 600 }}>
-						<BarChart chartData={userData} />
+						<BarChart />
 					</div>
 				</div>
 
 				<div className="chart-container d-flex">
 					<div style={{ width: 700, paddingRight:200, paddingLeft: 200 }}>
-						<PieChart chartData={userData} />
+						<PieChart chartData={userData3} />
 					</div>
 					<div style={{ width: 600 }} className="ms-5 ps-5">
-						<LineChart chartData={userData} />
+						<LineChart chartData={userData2} />
 					</div>
 				</div>
 			</div>
