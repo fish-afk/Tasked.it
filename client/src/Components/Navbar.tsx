@@ -168,12 +168,7 @@ const Navbar = ({ priv }: NavProps) => {
 						Tasks
 					</Link>
 				</li>
-				<li>
-					<Link to="/freelancer/listroles" className="nav-link text-white">
-						<AiOutlineKey className="bi me-2 mb-1" />
-						Roles
-					</Link>
-				</li>
+				
 				<li>
 					<Link to="/freelancer/listmessages" className="nav-link text-white">
 						<AiFillMessage className="bi me-2 mb-1" />

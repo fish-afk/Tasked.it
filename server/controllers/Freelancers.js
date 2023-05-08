@@ -365,6 +365,42 @@ async function get_my_roles(req, res) {
 	);
 }
 
+
+async function get_numbers(req, res) {
+	
+
+	const username = req.decoded["username"];
+	let queries = [
+		"SELECT COUNT(*) as done FROM Tasks WHERE Freelancer_id = ? AND completed = 1",
+		"SELECT COUNT(*) as remaining FROM Tasks WHERE Freelancer_id = ? AND completed = 0",
+	];
+
+	let promises = queries.map((query) => {
+		return new Promise((resolve, reject) => {
+			Model.connection.query(query, [username], (err, results) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(results[0]);
+				}
+			});
+		});
+	});
+
+	try {
+		let [doneResult, remainingResult] = await Promise.all(promises);
+		let finalResult = {
+			done: doneResult.done || 0,
+			remaining: remainingResult.remaining || 0,
+		};
+
+		return res.send({ status: "SUCCESS", result: finalResult });
+	} catch (err) {
+		return res.send({ status: "ERROR", message: "An error occurred" });
+	}
+
+}
+
 module.exports = {
 	registerFreelancer,
 	getAllFreelancers,
@@ -375,4 +411,5 @@ module.exports = {
 	login,
 	refresh,
 	get_my_roles,
+	get_numbers
 };

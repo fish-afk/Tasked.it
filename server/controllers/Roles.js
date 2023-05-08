@@ -4,9 +4,7 @@ const authMiddleware = require("../middleware/AuthToken");
 const bcrypt = require("bcrypt");
 
 function get_all_roles(req, res) {
-	if (req.decoded.privs !== "Admin") {
-		return res.send({ status: "FAILURE", message: "Insufficient privileges" });
-	} else {
+	
 		const query = "SELECT * FROM Roles";
 
 		Model.connection.query(query, (err, results) => {
@@ -17,7 +15,7 @@ function get_all_roles(req, res) {
 				return res.send({ status: "FAILURE", message: "Uknown error" });
 			}
 		});
-	}
+	
 }
 
 async function deleteRole(req, res) {
@@ -95,43 +93,36 @@ async function editrole(req, res) {
 	}
 }
 
-async function addrole(req, res) { 
+async function addrole(req, res) {
+	const { name, description } = req.body;
 
-    const { name, description } = req.body;
+	const role = { name, description };
 
-	const role = {  name, description };
+	if (req.decoded.privs !== "Admin") {
+		return res.send({
+			status: "FAILURE",
+			message: "Insufficient privileges",
+		});
+	} else {
+		const query = "INSERT INTO Roles SET ?";
 
-    if (req.decoded.privs !== "Admin") {
-        return res.send({
-            status: "FAILURE",
-            message: "Insufficient privileges",
-        });
-    } else { 
-
-        const query = "INSERT INTO Roles SET ?";
-
-				Model.connection.query(query, [role], (err, result) => {
-					if (err) {
-						console.log(err);
-						res
-							.status(500)
-							.send({ status: "FAILURE", message: "Unknown error" });
-					} else {
-						return res.send({
-							status: "SUCCESS",
-							message: "Added role successfully",
-						});
-					}
+		Model.connection.query(query, [role], (err, result) => {
+			if (err) {
+				console.log(err);
+				res.status(500).send({ status: "FAILURE", message: "Unknown error" });
+			} else {
+				return res.send({
+					status: "SUCCESS",
+					message: "Added role successfully",
 				});
-    }
-
+			}
+		});
+	}
 }
-
-
 
 module.exports = {
 	get_all_roles,
-    deleteRole,
-    editrole,
-    addrole
+	deleteRole,
+	editrole,
+	addrole,
 };

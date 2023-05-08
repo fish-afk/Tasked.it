@@ -34,6 +34,8 @@ import EditRole from "./Pages/Admin/EditRole";
 import EditProject from "./Pages/Admin/EditProject";
 import EditTask from "./Pages/Admin/EditTask";
 
+import EditFreelancerProfile from "./Pages/Freelancer/EditProfile";
+
 import Index from "./Pages";
 import AdminLogin from "./Pages/auth/AdminLogin";
 import FreelancerLogin from "./Pages/auth/FreelancerLogin";
@@ -293,6 +295,7 @@ function App() {
 					<Route path="/freelancer/listtasks" element={<ListTasksFreelancer />} />
 					<Route path="/freelancer/listmessages" element={<ListMessagesFreelancer />} />
 					<Route path="/freelancer/changepassword" element={<ChangePasswordFreelancer />} />
+					<Route path="/freelancer/editprofile" element={<EditFreelancerProfile />} />
 					<Route
 						path="/freelancer/logout"
 						element={<Logout accountype="freelancer" />}
