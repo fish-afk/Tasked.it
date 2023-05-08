@@ -92,7 +92,6 @@ function registerFreelancer(req, res) {
 			fullname,
 			age,
 		};
-		
 
 		// check if username exists
 		Model.connection.query(
@@ -166,7 +165,7 @@ function registerFreelancer(req, res) {
 
 async function updateFreelancer(req, res) {
 	const { username, email, fullname, roles, age } = req.body;
-	const Freelancer = {email, fullname, age };
+	const Freelancer = { email, fullname, age };
 
 	// check if username exists
 	Model.connection.query(
@@ -298,12 +297,82 @@ async function deleteFreelancer(req, res) {
 	);
 }
 
+async function change_password(req, res) {
+	const username = req.decoded["username"];
+
+	if (username == undefined) {
+		return res.send({ status: "FAILURE", message: "Missing details" });
+	} else {
+		const { oldPassword, newPassword } = req.body;
+
+		// get the hashed password from the database
+		Model.connection.query(
+			"SELECT * FROM Freelancers WHERE username = ?",
+			[username],
+			async (err, results) => {
+				if (err) {
+					return res.send({ status: "FAILURE", message: "Unknown error" });
+				}
+
+				const hashedPassword = results[0]?.password;
+
+				// verify the old password
+				const match = await bcrypt.compare(oldPassword, hashedPassword);
+				if (!match) {
+					return res.send({
+						status: "FAILURE",
+						message: "Invalid old password",
+					});
+				}
+
+				// hash the new password
+				const newHashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+				// update the password in the database
+				Model.connection.query(
+					"UPDATE Freelancers SET password = ? WHERE username = ?",
+					[newHashedPassword, username],
+					(err, result) => {
+						if (err) {
+							console.log(err);
+							return res.send({ status: "FAILURE", message: "Unknown error" });
+						} else {
+							return res.send({
+								status: "SUCCESS",
+								message: "Password updated successfully",
+							});
+						}
+					},
+				);
+			},
+		);
+	}
+}
+
+async function get_my_roles(req, res) {
+	const username = req.decoded.username;
+
+	Model.connection.query(
+		"SELECT * FROM freelancerroles WHERE freelancer = ?",
+		[username],
+		(err, result) => {
+			if (err) {
+				res.status(500).send({ status: "FAILURE", message: "Unknown error" });
+			} else {
+				res.send({ status: "SUCCESS", data: result });
+			}
+		},
+	);
+}
+
 module.exports = {
 	registerFreelancer,
 	getAllFreelancers,
 	getFreelancerByUsername,
 	updateFreelancer,
 	deleteFreelancer,
+	change_password,
 	login,
 	refresh,
+	get_my_roles,
 };

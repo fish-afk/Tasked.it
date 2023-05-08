@@ -235,10 +235,7 @@ async function updateAdmin(req, res) {
 }
 
 async function getAllAdmins(req, res) {
-	if (req.decoded.privs != "Admin") {
-		return res.send({ status: "FAILURE", message: "Insufficient privileges" });
-	}
-
+	
 	Model.connection.query(
 		"SELECT username, fullname, email, employee_title FROM Admins",
 		(err, result) => {

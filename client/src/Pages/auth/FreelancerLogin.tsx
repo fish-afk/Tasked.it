@@ -98,9 +98,18 @@ export default function FreelancerLogin({ setusername }: any) {
 												Forgot password?
 											</a>
 										</p>
+										<button
+											className="btn btn-outline-warning btn-lg px-5 me-2"
+											type="button"
+											onClick={() => {
+												Navigate("/");
+											}}
+										>
+											Back
+										</button>
 
 										<button
-											className="btn btn-outline-light btn-lg px-5"
+											className="btn btn-outline-primary btn-lg px-5 ms-2"
 											type="submit"
 										>
 											Login

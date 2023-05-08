@@ -106,7 +106,7 @@ const AdminTable = ({ admins }: Props) => {
 									headers: {
 										"taskedit-accesstoken": token,
 										username: username,
-										isadmin: "true",
+										isadmin: JSON.stringify(localStorage.getItem('priv') == 'freelancer') ? "false" : "true",
 										"Content-Type": "application/json",
 									},
 									method: "POST",

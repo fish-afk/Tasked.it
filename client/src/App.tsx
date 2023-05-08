@@ -15,6 +15,11 @@ import ListRoles from "./Pages/Admin/ListRoles";
 import ListClients from "./Pages/Admin/ListClients";
 import ShowTasksByProject from "./Pages/Admin/ShowTasksByProject";
 
+import ListAdminsFreelancer from "./Pages/Freelancer/ListAdmins";
+import ListTasksFreelancer from "./Pages/Freelancer/ListTasks";
+import ListMessagesFreelancer from "./Pages/Freelancer/ListMessages";
+import ChangePasswordFreelancer from "./Pages/Freelancer/ChangePassword";
+
 import AddNewFreelancer from "./Pages/Admin/AddNewFreelancer";
 import AddNewAdmin from "./Pages/Admin/AddNewAdmin";
 import AddNewClient from "./Pages/Admin/AddNewClient";
@@ -284,6 +289,10 @@ function App() {
 					<Route element={<FreelancerRedirect />} index />
 					<Route path="/freelancer/login" element={<FreelancerLogin />} />
 					<Route path="/freelancer/home" element={<FreelancerHome />} />
+					<Route path="/freelancer/listadmins" element={<ListAdminsFreelancer />} />
+					<Route path="/freelancer/listtasks" element={<ListTasksFreelancer />} />
+					<Route path="/freelancer/listmessages" element={<ListMessagesFreelancer />} />
+					<Route path="/freelancer/changepassword" element={<ChangePasswordFreelancer />} />
 					<Route
 						path="/freelancer/logout"
 						element={<Logout accountype="freelancer" />}

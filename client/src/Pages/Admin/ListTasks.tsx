@@ -32,7 +32,7 @@ export default function ListTasks() {
 					localStorage.getItem("username"),
 				).replaceAll('"', "");
 
-				const response = await fetch(`${SERVER_URL}/tasks/deleteproject`, {
+				const response = await fetch(`${SERVER_URL}/tasks/deletetask`, {
 					headers: {
 						"taskedit-accesstoken": token,
 						username: username,

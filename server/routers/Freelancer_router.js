@@ -16,8 +16,9 @@ router.get(
 	authMiddleware.verifyJWT,
 	FreelancerController.getAllFreelancers,
 );
-router.get("/:username", FreelancerController.getFreelancerByUsername);
 router.delete("/deletefreelancer", authMiddleware.verifyJWT, FreelancerController.deleteFreelancer);
 router.post("/confirmjwt", authMiddleware.confirmJWT);
+router.patch('/changepassword', authMiddleware.verifyJWT, FreelancerController.change_password)
+router.get('/getmyroles', authMiddleware.verifyJWT, FreelancerController.get_my_roles)
 
 module.exports = router;

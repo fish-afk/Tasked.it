@@ -219,6 +219,28 @@ async function update_task(req, res) {
 	});
 }
 
+async function delete_task(req, res) {
+	if (req.decoded.privs != "Admin") {
+		return res.send("Insufficient privileges");
+	} else {
+
+		const { id } = req.body;
+
+		const query = "DELETE FROM Tasks WHERE id = ?";
+
+		Model.connection.query(query, [id], (err, result) => {
+			if (err) {
+				console.log(err);
+				return res
+					.status(500)
+					.send({ status: "ERROR", message: "An error occurred" });
+			} else {
+				return res.send({ status: "SUCCESS", message: "Deleted tasks successfully" })
+			}
+		})
+	}
+}
+
 async function get_tasks_for_project(req, res) {
 	if (req.decoded.privs != "Admin") {
 		return res.send("Insufficient privileges");
@@ -238,6 +260,26 @@ async function get_tasks_for_project(req, res) {
 				return res.send({ status: "ERROR", message: "An error occurred" });
 			}
 		});
+	}
+}
+
+async function get_my_tasks(req, res) {
+	
+	const username = req.decoded['username'];
+
+	if (!username) {
+		return res.send({status: 'Missing details'})
+	} else {
+		const query = "SELECT * FROM Tasks WHERE Freelancer_id = ?";
+
+		Model.connection.query(query, [username], (err, results) => {
+			if (err) {
+				console.log(err)
+				return res.send({ status: "ERROR", message: "An error occurred" });
+			} else {
+				return res.send({status: 'SUCCESS', data: results})
+			}
+		})
 	}
 }
 
@@ -263,5 +305,6 @@ module.exports = {
 	get_all_tasks,
 	create_task,
 	update_task,
-	markasComplete,
+	get_my_tasks,
+	markasComplete,delete_task
 };

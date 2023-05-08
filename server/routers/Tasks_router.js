@@ -10,5 +10,7 @@ router.get('/getalltasks', authMiddleware.verifyJWT, tasksController.get_all_tas
 router.post('/newtask', authMiddleware.verifyJWT, tasksController.create_task)
 router.patch('/edittask', authMiddleware.verifyJWT, tasksController.update_task)
 router.patch('/markascomplete', authMiddleware.verifyJWT, tasksController.markasComplete);
+router.delete("/deletetask", authMiddleware.verifyJWT, tasksController.delete_task);
+router.get('/getmytasks', authMiddleware.verifyJWT, tasksController.get_my_tasks)
 
 module.exports = router;

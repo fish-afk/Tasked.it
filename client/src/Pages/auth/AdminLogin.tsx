@@ -82,7 +82,6 @@ export default function AdminLogin() {
 											<input
 												required
 												type="password"
-									
 												id="password"
 												className="form-control form-control-lg"
 											/>
@@ -98,7 +97,17 @@ export default function AdminLogin() {
 										</p>
 
 										<button
-											className="btn btn-outline-light btn-lg px-5"
+											className="btn btn-outline-warning btn-lg px-5 me-2"
+											type="button"
+											onClick={() => {
+												Navigate("/");
+											}}
+										>
+											Back
+										</button>
+
+										<button
+											className="btn btn-outline-primary btn-lg px-5 ms-2"
 											type="submit"
 										>
 											Login

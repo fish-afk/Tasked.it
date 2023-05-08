@@ -123,7 +123,7 @@ export default function AdminHome() {
 		"",
 	);
 	return (
-		<div className="d-flex ">
+		<div className="d-flex">
 			<Navbar priv="admin" />
 			<div className="text-center container-fluid-home">
 				<h1 className="p-4">Welcome {username}.</h1>
